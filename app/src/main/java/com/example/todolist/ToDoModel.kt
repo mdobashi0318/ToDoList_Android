@@ -43,7 +43,7 @@ open class ToDoModel: RealmObject() {
             quizModel.toDoDetail = addModel.toDoDetail
             */
 
-            quizModel.toDoName = "TESTtoDoName"
+            quizModel.toDoName = "TESTtoDoName${id}"
             quizModel.todoDate = "TESTtodoDate"
             quizModel.toDoDetail = "TESTtoDoDetail"
         }
