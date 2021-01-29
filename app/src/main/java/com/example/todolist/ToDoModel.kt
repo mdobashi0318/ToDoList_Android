@@ -5,13 +5,15 @@ import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
+import io.realm.kotlin.createObject
 import java.security.AccessControlContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 open class ToDoModel: RealmObject() {
     @PrimaryKey
-    var id: Long = 0
-//    var createTime:String = ""
+    var createTime:String = ""
     var toDoName: String = ""
     var todoDate:String = ""
     var toDoDetail:String = ""
@@ -35,15 +37,14 @@ open class ToDoModel: RealmObject() {
     fun addRealm(context: Context) {
         val realm = initRealm(context)
         realm.executeTransaction {
-            var id: Long = realm.where(ToDoModel::class.java).count()
-            var quizModel = realm.createObject(ToDoModel::class.java, id)
+            val format = SimpleDateFormat("yyyy/MM/dd HH:mm:SSS")
+            var quizModel = realm.createObject<ToDoModel>(format.format(Date()))
             /*
             quizModel.toDoName = addModel.toDoName
             quizModel.todoDate = addModel.todoDate
             quizModel.toDoDetail = addModel.toDoDetail
             */
-
-            quizModel.toDoName = "TESTtoDoName${id}"
+            quizModel.toDoName = "TESTtoDoName"
             quizModel.todoDate = "TESTtodoDate"
             quizModel.toDoDetail = "TESTtoDoDetail"
         }
