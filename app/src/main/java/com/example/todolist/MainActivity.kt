@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         var todoModel = ToDoModel().findALll(this)
 
-        if(!todoModel.isEmpty()) {
+        if (!todoModel.isEmpty()) {
             val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
             val layoutManager = LinearLayoutManager(this)
             // アダプターとレイアウトマネージャーをセット
@@ -23,13 +24,22 @@ class MainActivity : AppCompatActivity() {
             todoRecyclerView.setHasFixedSize(true)
         }
 
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
         floatingActionButton.setOnClickListener {
-            ToDoModel().addRealm(this)
+            val intent = Intent(this, TodoRegistrationActivity::class.java)
+            startActivity(intent)
         }
     }
 
+
     private fun onClick(todo: ToDoModel) {
-        Toast.makeText(applicationContext, "{${todo.toDoName}}が押されました",  Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "{${todo}}が押されました", Toast.LENGTH_LONG).show()
     }
 
 }
