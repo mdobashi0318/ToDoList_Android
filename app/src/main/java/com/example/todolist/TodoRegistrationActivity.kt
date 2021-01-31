@@ -1,21 +1,20 @@
 package com.example.todolist
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_todo_registration.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.yesButton
 import java.util.*
-import kotlin.concurrent.thread
 
 class TodoRegistrationActivity : AppCompatActivity() {
 
@@ -31,6 +30,38 @@ class TodoRegistrationActivity : AppCompatActivity() {
             TimePickerFragment(timeTextView).show(supportFragmentManager, "timePicker")
         }
 
+
+        registerButton.setOnClickListener {
+            if (titleEditText.text.toString().isEmpty() ||
+                dateTextView.text.toString().isEmpty() ||
+                timeTextView.text.toString().isEmpty() ||
+                detailEditText.text.toString().isEmpty()
+            ) {
+                alert("未入力の箇所があります") {
+                    yesButton {  }
+                }.show()
+                return@setOnClickListener
+            }
+
+            alert("Todoを登録しますか？") {
+                yesButton {
+                    ToDoModel().addRealm(
+                        applicationContext,
+                        titleEditText.text.toString(),
+                        dateTextView.text.toString(),
+                        timeTextView.text.toString(),
+                        detailEditText.text.toString()
+                    ) {
+                        alert("登録しました") {
+                            yesButton {
+                                finish()
+                            }
+                        }.show()
+                    }
+                }
+                negativeButton("閉じる") {}
+            }.show()
+        }
     }
 
 

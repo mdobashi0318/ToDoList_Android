@@ -54,7 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="日付を入力してください" />
+                android:hint="日付を入力してください"
+                android:text="" />
 
             <Button
                 android:id="@+id/datePickerButton"
@@ -80,7 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="時間を入力してください" />
+                android:hint="時間を入力してください"
+                android:text="" />
 
             <Button
                 android:id="@+id/timePickerButton"
