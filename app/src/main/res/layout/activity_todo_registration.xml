@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TodoRegistrationActivity">
@@ -31,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="タイトルを入力してください"
+            android:inputType="textPersonName"
             android:text="" />
 
 
@@ -48,7 +47,6 @@
             android:orientation="horizontal">
 
 
-
             <TextView
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
@@ -57,12 +55,13 @@
                 android:hint="日付を入力してください"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/datePickerButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="日付" />
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:src="@android:drawable/ic_menu_my_calendar" />
         </LinearLayout>
 
         <TextView
@@ -84,12 +83,12 @@
                 android:hint="時間を入力してください"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/timePickerButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="時間" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:src="@android:drawable/ic_lock_idle_alarm" />
 
         </LinearLayout>
 
@@ -104,8 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="詳細を入力してください"
+            android:inputType="textPersonName"
             android:text="" />
 
         <Button
