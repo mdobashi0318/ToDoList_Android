@@ -12,6 +12,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        floatingActionButton.setOnClickListener {
+            val intent = Intent(this, TodoRegistrationActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
 
         var todoModel = ToDoModel().findALll(this)
 
@@ -24,17 +33,6 @@ class MainActivity : AppCompatActivity() {
             todoRecyclerView.setHasFixedSize(true)
         }
 
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-
-        floatingActionButton.setOnClickListener {
-            val intent = Intent(this, TodoRegistrationActivity::class.java)
-            startActivity(intent)
-        }
     }
 
 
