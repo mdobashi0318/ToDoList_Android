@@ -1,6 +1,5 @@
 package com.example.todolist
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -9,7 +8,6 @@ import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_todo_registration.*
 import org.jetbrains.anko.alert
@@ -45,7 +43,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
             alert("Todoを登録しますか？") {
                 yesButton {
-                    ToDoModel().addRealm(
+                    ToDoModel().addTodo(
                         applicationContext,
                         titleEditText.text.toString(),
                         dateTextView.text.toString(),

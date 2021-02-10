@@ -32,7 +32,7 @@ open class ToDoModel : RealmObject() {
     }
 
 
-    fun addRealm(
+    fun addTodo(
         context: Context,
         toDoName: String,
         date: String,
@@ -45,7 +45,7 @@ open class ToDoModel : RealmObject() {
             val format = SimpleDateFormat("yyyy/MM/dd HH:mm:SSS")
             var quizModel = realm.createObject<ToDoModel>(format.format(Date()))
             quizModel.toDoName = toDoName
-            quizModel.todoDate = date + time
+            quizModel.todoDate = "$date  $time"
             quizModel.toDoDetail = toDoDetail
         }
          success()
