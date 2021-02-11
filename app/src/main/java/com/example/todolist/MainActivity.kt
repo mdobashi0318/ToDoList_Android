@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        var todoModel = ToDoModel().findALll(this)
+        var todoModel = ToDoModel().findAllTodo(this)
 
         if (!todoModel.isEmpty()) {
             val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }

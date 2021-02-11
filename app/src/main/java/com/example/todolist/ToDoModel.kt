@@ -26,7 +26,7 @@ open class ToDoModel : RealmObject() {
     }
 
 
-    fun findALll(context: Context): RealmResults<ToDoModel> {
+    fun findAllTodo(context: Context): RealmResults<ToDoModel> {
         val realm = initRealm(context)
         return realm.where(ToDoModel::class.java).findAll()
     }
