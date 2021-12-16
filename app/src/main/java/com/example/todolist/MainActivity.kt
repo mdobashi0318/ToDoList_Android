@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun onClick(todo: ToDoModel) {
-        Toast.makeText(applicationContext, "{${todo}}が押されました", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, TodoDetailActivity::class.java)
+        startActivity(intent)
     }
 
 }
