@@ -32,6 +32,11 @@ open class ToDoModel : RealmObject() {
     }
 
 
+    fun find(context: Context, createTime: String): ToDoModel? {
+        val realm = initRealm(context)
+        return realm.where(ToDoModel::class.java).equalTo("createTime", createTime).findFirst()
+    }
+
     fun addTodo(
         context: Context,
         toDoName: String,

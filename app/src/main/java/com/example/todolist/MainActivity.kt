@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClick(todo: ToDoModel) {
         val intent = Intent(this, TodoDetailActivity::class.java)
+        intent.putExtra("todo", todo.createTime)
         startActivity(intent)
     }
 

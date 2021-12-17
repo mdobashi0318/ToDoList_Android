@@ -6,12 +6,27 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_todo_detail.*
 
 class TodoDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val date = intent.getStringExtra("todo")
+        var todo = ToDoModel().find(applicationContext, date)
+
+
+        println("todo; $todo")
+        if(todo != null) {
+            titleTextView.text = todo.toDoName
+            dateTextView.text = todo.todoDate
+            detailTextView.text = todo.toDoDetail
+        }
+
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
