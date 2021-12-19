@@ -3,7 +3,6 @@ package com.example.todolist
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        var todoModel = ToDoModel().findAllTodo(this)
+        var todoModel = ToDoModel().findAll(this)
         val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
         val layoutManager = LinearLayoutManager(this)
         // アダプターとレイアウトマネージャーをセット

@@ -43,7 +43,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
             alert("Todoを登録しますか？") {
                 yesButton {
-                    ToDoModel().addTodo(
+                    ToDoModel().add(
                         applicationContext,
                         titleEditText.text.toString(),
                         dateTextView.text.toString(),

@@ -26,7 +26,7 @@ open class ToDoModel : RealmObject() {
     }
 
 
-    fun findAllTodo(context: Context): RealmResults<ToDoModel> {
+    fun findAll(context: Context): RealmResults<ToDoModel> {
         val realm = initRealm(context)
         return realm.where(ToDoModel::class.java).findAll()
     }
@@ -37,7 +37,7 @@ open class ToDoModel : RealmObject() {
         return realm.where(ToDoModel::class.java).equalTo("createTime", createTime).findFirst()
     }
 
-    fun addTodo(
+    fun add(
         context: Context,
         toDoName: String,
         date: String,
