@@ -56,4 +56,17 @@ open class ToDoModel : RealmObject() {
          success()
     }
 
+
+
+    fun delete(context: Context, createTime: String?, success: () -> Unit) {
+        if(createTime == null) {return}
+
+        val realm = initRealm(context)
+        realm.executeTransaction{
+            find(context,createTime)?.deleteFromRealm()
+        }
+        success()
+    }
+
+
 }

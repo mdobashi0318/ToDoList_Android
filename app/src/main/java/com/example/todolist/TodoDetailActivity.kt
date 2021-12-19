@@ -6,27 +6,28 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_todo_detail.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.yesButton
 
 class TodoDetailActivity : AppCompatActivity() {
+
+    private lateinit var todo: ToDoModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val date = intent.getStringExtra("todo")
-        var todo = ToDoModel().find(applicationContext, date)
-
-
-        println("todo; $todo")
-        if(todo != null) {
-            titleTextView.text = todo.toDoName
-            dateTextView.text = todo.todoDate
-            detailTextView.text = todo.toDoDetail
+        ToDoModel().find(applicationContext, date)?.let {
+            todo = it
         }
 
-
-
+        titleTextView.text = todo.toDoName
+        dateTextView.text = todo.todoDate
+        detailTextView.text = todo.toDoDetail
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -44,7 +45,15 @@ class TodoDetailActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-            R.id.detail_edit -> {
+            R.id.detail_delete -> {
+                alert("Todoを削除しますか？") {
+                    yesButton {
+                        ToDoModel().delete(applicationContext, todo.createTime) {
+                            alert("削除しました") { yesButton { finish() } }.show()
+                        }
+                    }
+                    noButton { }
+                }.show()
                 true
             }
             android.R.id.home -> {

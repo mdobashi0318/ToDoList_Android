@@ -23,15 +23,12 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         var todoModel = ToDoModel().findAllTodo(this)
-
-        if (!todoModel.isEmpty()) {
-            val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
-            val layoutManager = LinearLayoutManager(this)
-            // アダプターとレイアウトマネージャーをセット
-            todoRecyclerView.layoutManager = layoutManager
-            todoRecyclerView.adapter = adapter
-            todoRecyclerView.setHasFixedSize(true)
-        }
+        val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
+        val layoutManager = LinearLayoutManager(this)
+        // アダプターとレイアウトマネージャーをセット
+        todoRecyclerView.layoutManager = layoutManager
+        todoRecyclerView.adapter = adapter
+        todoRecyclerView.setHasFixedSize(true)
 
     }
 
