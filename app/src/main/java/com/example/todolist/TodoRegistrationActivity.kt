@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
@@ -28,6 +30,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_registration)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         datePickerButton.setOnClickListener {
             DatePickerFragment(dateTextView).show(supportFragmentManager, "datePicker")
@@ -119,6 +122,14 @@ class TodoRegistrationActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     class TimePickerFragment(private var timeTextView: TextView) : DialogFragment(),
         TimePickerDialog.OnTimeSetListener {
