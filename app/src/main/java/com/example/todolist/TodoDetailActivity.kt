@@ -19,7 +19,11 @@ class TodoDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+
+    override fun onResume() {
+        super.onResume()
         val date = intent.getStringExtra("todo")
         ToDoModel().find(applicationContext, date)?.let {
             todo = it
@@ -42,6 +46,8 @@ class TodoDetailActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.detail_edit -> {
                 val intent = Intent(this, TodoRegistrationActivity::class.java)
+                intent.putExtra("mode", Mode.Edit.name)
+                intent.putExtra("createTime", todo.createTime)
                 startActivity(intent)
                 true
             }

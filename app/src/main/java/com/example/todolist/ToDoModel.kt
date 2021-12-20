@@ -46,24 +46,47 @@ open class ToDoModel : RealmObject() {
         success: () -> Unit
     ) {
         val realm = initRealm(context)
-        realm.executeTransaction{
+        realm.executeTransaction {
             val format = SimpleDateFormat("yyyy/MM/dd HH:mm:SSS")
-            var quizModel = realm.createObject<ToDoModel>(format.format(Date()))
-            quizModel.toDoName = toDoName
-            quizModel.todoDate = "$date  $time"
-            quizModel.toDoDetail = toDoDetail
+            var todo = realm.createObject<ToDoModel>(format.format(Date()))
+            todo.toDoName = toDoName
+            todo.todoDate = "$date  $time"
+            todo.toDoDetail = toDoDetail
         }
-         success()
+        success()
+    }
+
+    fun update(
+        context: Context,
+        toDoName: String,
+        date: String,
+        time: String,
+        toDoDetail: String,
+        createTime: String,
+        success: () -> Unit
+    ) {
+        val realm = initRealm(context)
+        var todo = find(context, createTime)
+        if(todo == null) return
+
+
+        realm.executeTransaction {
+            todo.toDoName = toDoName
+            todo.todoDate = "$date  $time"
+            todo.toDoDetail = toDoDetail
+        }
+        success()
     }
 
 
-
     fun delete(context: Context, createTime: String?, success: () -> Unit) {
-        if(createTime == null) {return}
+        if (createTime == null) {
+            return
+        }
 
         val realm = initRealm(context)
-        realm.executeTransaction{
-            find(context,createTime)?.deleteFromRealm()
+        realm.executeTransaction {
+            find(context, createTime)?.deleteFromRealm()
         }
         success()
     }

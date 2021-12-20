@@ -14,7 +14,16 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 import java.util.*
 
+
+enum class Mode {
+    Add, Edit
+}
+
 class TodoRegistrationActivity : AppCompatActivity() {
+
+    var mode: Mode = Mode.Add
+
+    lateinit var todo: ToDoModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +37,9 @@ class TodoRegistrationActivity : AppCompatActivity() {
             TimePickerFragment(timeTextView).show(supportFragmentManager, "timePicker")
         }
 
+        setIntentDate()
+
+        registerButton.text = modeMessage("登録", "更新")
 
         registerButton.setOnClickListener {
             if (titleEditText.text.toString().isEmpty() ||
@@ -36,29 +48,74 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 detailEditText.text.toString().isEmpty()
             ) {
                 alert("未入力の箇所があります") {
-                    yesButton {  }
+                    yesButton { }
                 }.show()
                 return@setOnClickListener
             }
 
-            alert("Todoを登録しますか？") {
+            alert(modeMessage("Todoを登録しますか？", "Todoを更新しますか？")) {
                 yesButton {
-                    ToDoModel().add(
-                        applicationContext,
-                        titleEditText.text.toString(),
-                        dateTextView.text.toString(),
-                        timeTextView.text.toString(),
-                        detailEditText.text.toString()
-                    ) {
-                        alert("登録しました") {
-                            yesButton {
-                                finish()
-                            }
-                        }.show()
+                    if (mode == Mode.Add) {
+                        ToDoModel().add(
+                            applicationContext,
+                            titleEditText.text.toString(),
+                            dateTextView.text.toString(),
+                            timeTextView.text.toString(),
+                            detailEditText.text.toString()
+                        ) {
+                            alert("登録しました") {
+                                yesButton {
+                                    finish()
+                                }
+                            }.show()
+                        }
+                    } else {
+                        ToDoModel().update(
+                            applicationContext,
+                            titleEditText.text.toString(),
+                            dateTextView.text.toString(),
+                            timeTextView.text.toString(),
+                            detailEditText.text.toString(),
+                            todo.createTime
+                        ) {
+                            alert("更新しました") {
+                                yesButton {
+                                    finish()
+                                }
+                            }.show()
+                        }
                     }
                 }
                 negativeButton("閉じる") {}
             }.show()
+        }
+    }
+
+
+    private fun setIntentDate() {
+        intent.getStringExtra("createTime")?.let { createTime ->
+            ToDoModel().find(applicationContext, createTime)?.let { result ->
+                todo = result
+            }
+        }
+
+        intent.getStringExtra("mode")?.let {
+            if (it == Mode.Edit.name) {
+                mode = Mode.Edit
+                titleEditText.text.append(todo.toDoName)
+                dateTextView.text = todo.todoDate
+                // TODO: 2021/12/20
+                timeTextView.text = "時間"
+                detailEditText.text.append(todo.toDoDetail)
+            }
+        }
+    }
+
+    private fun modeMessage(addMessage: String, editMessage: String): String {
+        return if (mode == Mode.Add) {
+            addMessage
+        } else {
+            editMessage
         }
     }
 
