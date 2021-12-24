@@ -1,13 +1,11 @@
-package com.example.todolist
+package com.example.todolist.model
 
 import android.content.Context
-import android.text.Editable
 import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
 import io.realm.kotlin.createObject
-import java.security.AccessControlContext
 import java.text.SimpleDateFormat
 import java.util.*
 

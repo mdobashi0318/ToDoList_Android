@@ -1,9 +1,11 @@
-package com.example.todolist
+package com.example.todolist.uiparts
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.R
+import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_recycler_view_item.view.*
 
 class TodoListAdapter(private val todoModel: MutableList<ToDoModel>, private val onClick:(ToDoModel) -> Unit) :

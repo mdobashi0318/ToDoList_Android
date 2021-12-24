@@ -1,4 +1,4 @@
-package com.example.todolist
+package com.example.todolist.screen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
+import com.example.todolist.other.Mode
+import com.example.todolist.R
+import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_detail.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton

@@ -1,7 +1,8 @@
-package com.example.todolist
+package com.example.todolist.uiparts
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.todolist.R
 
 class TodoRecyclerViewItem : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

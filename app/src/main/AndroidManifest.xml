@@ -10,11 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".TodoDetailActivity"
+            android:name=".screen.TodoDetailActivity"
             android:exported="true" />
-        <activity android:name=".TodoRegistrationActivity"></activity>
-        <activity android:name=".TodoRecyclerViewItem" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".screen.TodoRegistrationActivity"></activity>
+        <activity android:name=".uiparts.TodoRecyclerViewItem" />
+        <activity android:name=".screen.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

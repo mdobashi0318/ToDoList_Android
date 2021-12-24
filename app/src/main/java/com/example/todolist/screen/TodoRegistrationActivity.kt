@@ -1,25 +1,25 @@
-package com.example.todolist
+package com.example.todolist.screen
 
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import com.example.todolist.other.Mode
+import com.example.todolist.R
+import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_registration.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 import java.util.*
 
 
-enum class Mode {
-    Add, Edit
-}
+
 
 class TodoRegistrationActivity : AppCompatActivity() {
 

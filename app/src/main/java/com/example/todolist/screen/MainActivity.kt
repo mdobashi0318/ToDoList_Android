@@ -1,9 +1,12 @@
-package com.example.todolist
+package com.example.todolist.screen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todolist.*
+import com.example.todolist.model.ToDoModel
+import com.example.todolist.uiparts.TodoListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
