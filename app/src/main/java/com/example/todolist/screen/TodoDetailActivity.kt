@@ -32,7 +32,7 @@ class TodoDetailActivity : AppCompatActivity() {
         }
 
         titleTextView.text = todo.toDoName
-        dateTextView.text = todo.todoDate
+        dateTextView.text = "${todo.todoDate} ${todo.todoTime}"
         detailTextView.text = todo.toDoDetail
     }
 

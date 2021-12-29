@@ -24,7 +24,7 @@ class TodoListAdapter(private val todoModel: MutableList<ToDoModel>, private val
 
         fun bind(todo: ToDoModel) {
             view.title.text = todo.toDoName
-            view.todoDate.text = todo.todoDate
+            view.todoDate.text = "${todo.todoDate} ${todo.todoTime}"
             currentTodo = todo
         }
     }

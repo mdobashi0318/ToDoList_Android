@@ -107,8 +107,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 mode = Mode.Edit
                 titleEditText.text.append(todo.toDoName)
                 dateTextView.text = todo.todoDate
-                // TODO: 2021/12/20
-                timeTextView.text = "時間"
+                timeTextView.text = todo.todoTime
                 detailEditText.text.append(todo.toDoDetail)
             }
         }

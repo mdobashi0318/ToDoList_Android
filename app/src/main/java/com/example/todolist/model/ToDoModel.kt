@@ -15,6 +15,7 @@ open class ToDoModel : RealmObject() {
     var createTime: String = ""
     var toDoName: String = ""
     var todoDate: String = ""
+    var todoTime: String = ""
     var toDoDetail: String = ""
 
 
@@ -48,7 +49,8 @@ open class ToDoModel : RealmObject() {
             val format = SimpleDateFormat("yyyy/MM/dd HH:mm:SSS")
             var todo = realm.createObject<ToDoModel>(format.format(Date()))
             todo.toDoName = toDoName
-            todo.todoDate = "$date  $time"
+            todo.todoDate = date
+            todo.todoTime = time
             todo.toDoDetail = toDoDetail
         }
         success()
@@ -70,7 +72,8 @@ open class ToDoModel : RealmObject() {
 
         realm.executeTransaction {
             todo.toDoName = toDoName
-            todo.todoDate = "$date  $time"
+            todo.todoDate = date
+            todo.todoTime = time
             todo.toDoDetail = toDoDetail
         }
         success()
