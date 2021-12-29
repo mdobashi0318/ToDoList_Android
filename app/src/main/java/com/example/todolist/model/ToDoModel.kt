@@ -63,8 +63,8 @@ open class ToDoModel : RealmObject() {
         }
 
 
-        val dateList = "2021/12/29".split("/")
-        val timeList = "21:42".split(":")
+        val dateList = date.split("/")
+        val timeList = time.split(":")
         setNotification(context, dateList[1].toInt(), dateList[2].toInt(), timeList[0].toInt(), timeList[1].toInt())
         success()
     }
