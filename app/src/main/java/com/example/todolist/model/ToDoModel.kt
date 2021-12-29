@@ -1,6 +1,14 @@
 package com.example.todolist.model
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import com.example.todolist.other.Receiver
+import com.example.todolist.screen.MainActivity
+import io.realm.R
 import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.RealmResults
@@ -53,6 +61,11 @@ open class ToDoModel : RealmObject() {
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
         }
+
+
+        val dateList = "2021/12/29".split("/")
+        val timeList = "21:42".split(":")
+        setNotification(context, dateList[1].toInt(), dateList[2].toInt(), timeList[0].toInt(), timeList[1].toInt())
         success()
     }
 
@@ -90,6 +103,21 @@ open class ToDoModel : RealmObject() {
             find(context, createTime)?.deleteFromRealm()
         }
         success()
+    }
+
+
+    private fun setNotification(context: Context, month: Int, day: Int, hour: Int, min: Int) {
+        val calender = Calendar.getInstance()
+        val intent = Intent(context, Receiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        calender.set(Calendar.MONTH, month - 1)
+        calender.set(Calendar.DAY_OF_MONTH, day)
+        calender.set(Calendar.HOUR_OF_DAY, hour)
+        calender.set(Calendar.MINUTE, min)
+        calender.set(Calendar.SECOND, 0)
+
+        val alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC, calender.timeInMillis, pendingIntent)
     }
 
 
