@@ -24,7 +24,7 @@ class MyNotification {
         private const val NOTIFICATION_CHANNEL_NAME = "todolist"
         private const val NOTIFICATION_CHANNEL_DESCRIPTION = "期限がきたら通知を表示します"
         private const val NOTIFICATION_TITLE = "期限切れのTodoがあります"
-        private const val NOTIFICATION_MESSAGE = "期限切れのTodoがあります。\n確認してください"
+        private const val NOTIFICATION_MESSAGE = ""
         fun sendNotification(context: Context) {
             val channelId = NOTIFICATION_CHANNEL_ID
             val channelName = NOTIFICATION_CHANNEL_NAME
