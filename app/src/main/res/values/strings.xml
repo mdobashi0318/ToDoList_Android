@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ToDoList</string>
+    <string name="detail_edit">編集</string>
+    <string name="detail_delete">削除</string>
+
+    <string name="todoName">タイトル</string>
+    <string name="todoDetail">詳細</string>
+    <string name="todoDate">期日</string>
 </resources>
