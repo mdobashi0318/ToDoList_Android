@@ -58,8 +58,8 @@
             <ImageButton
                 android:id="@+id/datePickerButton"
                 style="@style/Widget.AppCompat.ImageButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_weight="0"
                 android:src="@android:drawable/ic_menu_my_calendar" />
         </LinearLayout>
@@ -85,8 +85,8 @@
 
             <ImageButton
                 android:id="@+id/timePickerButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_weight="0"
                 android:src="@android:drawable/ic_lock_idle_alarm" />
 
