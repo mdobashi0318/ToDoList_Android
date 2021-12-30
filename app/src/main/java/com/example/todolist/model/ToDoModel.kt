@@ -124,7 +124,23 @@ open class ToDoModel : RealmObject() {
         setNotification(context, dateList[1].toInt(), dateList[2].toInt(), timeList[0].toInt(), timeList[1].toInt(), createTime.toInt())
         success()
     }
-    
+
+    /**
+     * Todoを全件削除する
+     * @param context
+     */
+    fun allDelete(context: Context, success: () -> Unit) {
+        if (createTime == null) {
+            return
+        }
+
+        val realm = initRealm(context)
+        cancelAllNotification(context)
+        realm.executeTransaction {
+            findAll(context).deleteAllFromRealm()
+        }
+        success()
+    }
 
     /**
      * Todoを１件削除する
@@ -166,6 +182,23 @@ open class ToDoModel : RealmObject() {
         val alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC, calender.timeInMillis, pendingIntent)
     }
+
+
+
+    /**
+     * ローカル通知を全件キャンセルする
+     * @param context
+     */
+    private fun cancelAllNotification(context: Context) {
+        val intent = Intent(context, Receiver::class.java)
+        val model = findAll(context)
+        model.forEach {
+            val pendingIntent = PendingIntent.getBroadcast(context, it.createTime.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+        }
+    }
+
 
     /**
      * ローカル通知をキャンセルする
