@@ -47,6 +47,7 @@ class TodoDetailActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.detail_edit -> {
+                // Todo編集画面に遷移する
                 val intent = Intent(this, TodoRegistrationActivity::class.java)
                 intent.putExtra("mode", Mode.Edit.name)
                 intent.putExtra("createTime", todo.createTime)
@@ -54,6 +55,7 @@ class TodoDetailActivity : AppCompatActivity() {
                 true
             }
             R.id.detail_delete -> {
+                // Todoを削除する
                 alert("Todoを削除しますか？") {
                     yesButton {
                         ToDoModel().delete(applicationContext, todo.createTime) {
@@ -65,6 +67,7 @@ class TodoDetailActivity : AppCompatActivity() {
                 true
             }
             android.R.id.home -> {
+                /// 前の画面に戻る
                 finish()
                 true
             }

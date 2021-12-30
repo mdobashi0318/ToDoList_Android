@@ -19,8 +19,6 @@ import org.jetbrains.anko.yesButton
 import java.util.*
 
 
-
-
 class TodoRegistrationActivity : AppCompatActivity() {
 
     var mode: Mode = Mode.Add
@@ -45,6 +43,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
         registerButton.text = modeMessage("登録", "更新")
 
         registerButton.setOnClickListener {
+
             if (titleEditText.text.toString().isEmpty() ||
                 dateTextView.text.toString().isEmpty() ||
                 timeTextView.text.toString().isEmpty() ||
@@ -56,6 +55,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Todoを追加、または更新する
             alert(modeMessage("Todoを登録しますか？", "Todoを更新しますか？")) {
                 yesButton {
                     if (mode == Mode.Add) {
@@ -94,7 +94,9 @@ class TodoRegistrationActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
+     * intentにデータ持っていたらtodoを検索し、テキストにセットする
+     */
     private fun setIntentDate() {
         intent.getStringExtra("createTime")?.let { createTime ->
             ToDoModel().find(applicationContext, createTime)?.let { result ->
@@ -113,6 +115,11 @@ class TodoRegistrationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * modeによって設定したテキストを返す
+     * @param addMessage modeがAddの時に返すテキスト
+     * @param editMessage modeがEditの時に返すテキスト
+     */
     private fun modeMessage(addMessage: String, editMessage: String): String {
         return if (mode == Mode.Add) {
             addMessage
@@ -130,6 +137,9 @@ class TodoRegistrationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * TimePickerを設定する
+     */
     class TimePickerFragment(private var timeTextView: TextView) : DialogFragment(),
         TimePickerDialog.OnTimeSetListener {
 
@@ -151,6 +161,9 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * DatePickerを設定する
+     */
     class DatePickerFragment(private var dateTextView: TextView) : DialogFragment(),
         DatePickerDialog.OnDateSetListener {
 

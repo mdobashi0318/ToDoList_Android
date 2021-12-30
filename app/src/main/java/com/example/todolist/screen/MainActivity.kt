@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         floatingActionButton.setOnClickListener {
+            // Todo作成画面に遷移する
             val intent = Intent(this, TodoRegistrationActivity::class.java)
             startActivity(intent)
         }
@@ -48,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * 選択したTodoの詳細に遷移する
+     */
     private fun onClick(todo: ToDoModel) {
         val intent = Intent(this, TodoDetailActivity::class.java)
         intent.putExtra("todo", todo.createTime)
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.trash -> {
+                // Todoを全件削除する
                 alert("全件削除しますか？") {
                     yesButton {
                         ToDoModel().allDelete(applicationContext) {
