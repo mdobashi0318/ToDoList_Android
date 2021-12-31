@@ -26,10 +26,12 @@ class TodoDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val date = intent.getStringExtra("todo")
-        ToDoModel().find(applicationContext, date)?.let {
-            todo = it
+        intent.getStringExtra("todo")?.let { date ->
+            ToDoModel().find(applicationContext, date)?.let {
+                todo = it
+            }
         }
+
 
         titleTextView.text = todo.toDoName
         dateTextView.text = "${todo.todoDate} ${todo.todoTime}"

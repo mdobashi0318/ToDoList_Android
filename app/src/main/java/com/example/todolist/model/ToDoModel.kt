@@ -172,7 +172,7 @@ open class ToDoModel : RealmObject() {
     private fun setNotification(context: Context, month: Int, day: Int, hour: Int, min: Int, createTime: Int) {
         val calender = Calendar.getInstance()
         val intent = Intent(context, Receiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, createTime, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, createTime, intent, PendingIntent.FLAG_IMMUTABLE)
         calender.set(Calendar.MONTH, month - 1)
         calender.set(Calendar.DAY_OF_MONTH, day)
         calender.set(Calendar.HOUR_OF_DAY, hour)
@@ -193,7 +193,7 @@ open class ToDoModel : RealmObject() {
         val intent = Intent(context, Receiver::class.java)
         val model = findAll(context)
         model.forEach {
-            val pendingIntent = PendingIntent.getBroadcast(context, it.createTime.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pendingIntent = PendingIntent.getBroadcast(context, it.createTime.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
             val alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.cancel(pendingIntent)
         }
@@ -201,13 +201,13 @@ open class ToDoModel : RealmObject() {
 
 
     /**
-     * ローカル通知をキャンセルする
+     * ローカル通知をキャンセルするFLAG_IMMUTABLE
      * @param context
      * @param createTime キャンセル通知設定の識別値
      */
     private fun cancelNotification(context: Context, createTime: Int) {
         val intent = Intent(context, Receiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, createTime, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, createTime, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val alarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
