@@ -28,7 +28,7 @@
     <TextView
         android:id="@+id/dateLabel"
         android:layout_width="62dp"
-        android:layout_height="15dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/todoDate"
         app:layout_constraintStart_toStartOf="@+id/titleTextView"
