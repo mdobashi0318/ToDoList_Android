@@ -72,15 +72,15 @@ class MainActivity : AppCompatActivity() {
                 // Todoを全件削除する
                 AlertDialog.Builder(this)
                     .setTitle("全件削除しますか？")
-                    .setPositiveButton("削除") { _, _ ->
+                    .setPositiveButton(R.string.deleteButton) { _, _ ->
                         ToDoModel().allDelete(applicationContext) {
                             AlertDialog.Builder(this)
                                 .setTitle("削除しました")
-                                .setPositiveButton("閉じる") { _ , _ -> onResume() }
+                                .setPositiveButton(R.string.closeButton) { _ , _ -> onResume() }
                                 .show()
                         }
                     }
-                    .setNegativeButton("キャンセル", null)
+                    .setNegativeButton(R.string.cancelButton, null)
                     .show()
                 true
             }

@@ -57,7 +57,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
             ) {
                 AlertDialog.Builder(this)
                     .setTitle("未入力の箇所があります")
-                    .setNegativeButton("閉じる", null)
+                    .setNegativeButton(R.string.closeButton, null)
                     .show()
                 return@setOnClickListener
             }
@@ -65,14 +65,14 @@ class TodoRegistrationActivity : AppCompatActivity() {
             // Todoを追加、または更新する
             AlertDialog.Builder(this)
                 .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
-                .setPositiveButton("はい") { _, _ ->
+                .setPositiveButton(R.string.yesButton) { _, _ ->
                     if (mode == Mode.Add) {
                         addTodo()
                     } else {
                         updateTodo()
                     }
                 }
-                .setNegativeButton("いいえ", null)
+                .setNegativeButton(R.string.noButton, null)
                 .show()
         }
     }
@@ -90,7 +90,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
         ) {
             AlertDialog.Builder(this)
                 .setTitle("登録しました")
-                .setPositiveButton("閉じる") { _, _ ->
+                .setPositiveButton(R.string.closeButton) { _, _ ->
                     finish()
                 }
                 .show()
@@ -111,7 +111,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
         ) {
             AlertDialog.Builder(this)
                 .setTitle("更新しました")
-                .setPositiveButton("閉じる") { _, _ ->
+                .setPositiveButton(R.string.closeButton) { _, _ ->
                     finish()
                 }
                 .show()
