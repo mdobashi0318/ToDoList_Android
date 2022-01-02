@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_detail.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.yesButton
 
 class TodoDetailActivity : AppCompatActivity() {
 
@@ -58,14 +56,20 @@ class TodoDetailActivity : AppCompatActivity() {
             }
             R.id.detail_delete -> {
                 // Todoを削除する
-                alert("Todoを削除しますか？") {
-                    yesButton {
+                AlertDialog.Builder(this)
+                    .setTitle("Todoを削除しますか?")
+                    .setPositiveButton("削除") { _, _ ->
                         ToDoModel().delete(applicationContext, todo.createTime) {
-                            alert("削除しました") { yesButton { finish() } }.show()
+                            AlertDialog.Builder(this)
+                                .setTitle("削除しました")
+                                .setPositiveButton("閉じる") { _, _ ->
+                                    finish()
+                                }
+                                .show()
                         }
                     }
-                    noButton { }
-                }.show()
+                    .setNegativeButton("キャンセル", null)
+                    .show()
                 true
             }
             android.R.id.home -> {
