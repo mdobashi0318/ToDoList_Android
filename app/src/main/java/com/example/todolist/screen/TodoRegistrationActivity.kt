@@ -1,5 +1,6 @@
 package com.example.todolist.screen
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -14,8 +15,6 @@ import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_registration.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.yesButton
 import java.util.*
 
 
@@ -39,58 +38,83 @@ class TodoRegistrationActivity : AppCompatActivity() {
         }
 
         setIntentDate()
+        setRegisterButton()
+    }
 
+
+    /**
+     * 登録/更新ボタンの設定をする
+     */
+    private fun setRegisterButton() {
         registerButton.text = modeMessage("登録", "更新")
 
         registerButton.setOnClickListener {
-
+            // 入力されているかのチェック
             if (titleEditText.text.toString().isEmpty() ||
                 dateTextView.text.toString().isEmpty() ||
                 timeTextView.text.toString().isEmpty() ||
                 detailEditText.text.toString().isEmpty()
             ) {
-                alert("未入力の箇所があります") {
-                    yesButton { }
-                }.show()
+                AlertDialog.Builder(this)
+                    .setTitle("未入力の箇所があります")
+                    .setNegativeButton(R.string.closeButton, null)
+                    .show()
                 return@setOnClickListener
             }
 
             // Todoを追加、または更新する
-            alert(modeMessage("Todoを登録しますか？", "Todoを更新しますか？")) {
-                yesButton {
+            AlertDialog.Builder(this)
+                .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
+                .setPositiveButton(R.string.yesButton) { _, _ ->
                     if (mode == Mode.Add) {
-                        ToDoModel().add(
-                            applicationContext,
-                            titleEditText.text.toString(),
-                            dateTextView.text.toString(),
-                            timeTextView.text.toString(),
-                            detailEditText.text.toString()
-                        ) {
-                            alert("登録しました") {
-                                yesButton {
-                                    finish()
-                                }
-                            }.show()
-                        }
+                        addTodo()
                     } else {
-                        ToDoModel().update(
-                            applicationContext,
-                            titleEditText.text.toString(),
-                            dateTextView.text.toString(),
-                            timeTextView.text.toString(),
-                            detailEditText.text.toString(),
-                            todo.createTime
-                        ) {
-                            alert("更新しました") {
-                                yesButton {
-                                    finish()
-                                }
-                            }.show()
-                        }
+                        updateTodo()
                     }
                 }
-                negativeButton("閉じる") {}
-            }.show()
+                .setNegativeButton(R.string.noButton, null)
+                .show()
+        }
+    }
+
+    /**
+     * Todoを新規作成する
+     */
+    private fun addTodo() {
+        ToDoModel().add(
+            applicationContext,
+            titleEditText.text.toString(),
+            dateTextView.text.toString(),
+            timeTextView.text.toString(),
+            detailEditText.text.toString()
+        ) {
+            AlertDialog.Builder(this)
+                .setTitle("登録しました")
+                .setPositiveButton(R.string.closeButton) { _, _ ->
+                    finish()
+                }
+                .show()
+        }
+    }
+
+    /**
+     * Todoを更新する
+     */
+    private fun updateTodo() {
+        ToDoModel().update(
+            applicationContext,
+            titleEditText.text.toString(),
+            dateTextView.text.toString(),
+            timeTextView.text.toString(),
+            detailEditText.text.toString(),
+            todo.createTime
+        ) {
+            AlertDialog.Builder(this)
+                .setTitle("更新しました")
+                .setPositiveButton(R.string.closeButton) { _, _ ->
+                    finish()
+                }
+                .show()
         }
     }
 

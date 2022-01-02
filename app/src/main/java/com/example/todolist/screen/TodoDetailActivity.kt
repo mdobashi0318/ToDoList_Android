@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
 import kotlinx.android.synthetic.main.activity_todo_detail.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.yesButton
 
 class TodoDetailActivity : AppCompatActivity() {
 
@@ -26,10 +24,12 @@ class TodoDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val date = intent.getStringExtra("todo")
-        ToDoModel().find(applicationContext, date)?.let {
-            todo = it
+        intent.getStringExtra("todo")?.let { date ->
+            ToDoModel().find(applicationContext, date)?.let {
+                todo = it
+            }
         }
+
 
         titleTextView.text = todo.toDoName
         dateTextView.text = "${todo.todoDate} ${todo.todoTime}"
@@ -56,14 +56,20 @@ class TodoDetailActivity : AppCompatActivity() {
             }
             R.id.detail_delete -> {
                 // Todoを削除する
-                alert("Todoを削除しますか？") {
-                    yesButton {
+                AlertDialog.Builder(this)
+                    .setTitle("Todoを削除しますか?")
+                    .setPositiveButton(R.string.deleteButton) { _, _ ->
                         ToDoModel().delete(applicationContext, todo.createTime) {
-                            alert("削除しました") { yesButton { finish() } }.show()
+                            AlertDialog.Builder(this)
+                                .setTitle("削除しました")
+                                .setPositiveButton(R.string.closeButton) { _, _ ->
+                                    finish()
+                                }
+                                .show()
                         }
                     }
-                    noButton { }
-                }.show()
+                    .setNegativeButton(R.string.cancelButton, null)
+                    .show()
                 true
             }
             android.R.id.home -> {

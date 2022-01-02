@@ -1,5 +1,6 @@
 package com.example.todolist.screen
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -18,9 +19,7 @@ import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
 import com.example.todolist.uiparts.TodoListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.yesButton
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,18 +70,18 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.trash -> {
                 // Todoを全件削除する
-                alert("全件削除しますか？") {
-                    yesButton {
+                AlertDialog.Builder(this)
+                    .setTitle("全件削除しますか？")
+                    .setPositiveButton(R.string.deleteButton) { _, _ ->
                         ToDoModel().allDelete(applicationContext) {
-                            alert("削除しました") {
-                                yesButton {
-                                    onResume()
-                                }
-                            }.show()
+                            AlertDialog.Builder(this)
+                                .setTitle("削除しました")
+                                .setPositiveButton(R.string.closeButton) { _ , _ -> onResume() }
+                                .show()
                         }
                     }
-                    negativeButton("キャンセル") {}
-                }.show()
+                    .setNegativeButton(R.string.cancelButton, null)
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
