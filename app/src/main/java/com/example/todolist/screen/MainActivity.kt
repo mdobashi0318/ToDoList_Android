@@ -18,6 +18,7 @@ import com.example.todolist.*
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
 import com.example.todolist.uiparts.TodoListAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -70,17 +71,18 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.trash -> {
                 // Todoを全件削除する
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                     .setTitle("全件削除しますか？")
                     .setPositiveButton(R.string.deleteButton) { _, _ ->
                         ToDoModel().allDelete(applicationContext) {
-                            AlertDialog.Builder(this)
+                            MaterialAlertDialogBuilder(this)
                                 .setTitle("削除しました")
                                 .setPositiveButton(R.string.closeButton) { _ , _ -> onResume() }
                                 .show()
                         }
+
                     }
-                    .setNegativeButton(R.string.cancelButton, null)
+                    .setNegativeButton(R.string.cancelButton) {_ , _->}
                     .show()
                 true
             }

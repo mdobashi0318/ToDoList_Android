@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_todo_detail.*
 
 class TodoDetailActivity : AppCompatActivity() {
@@ -56,11 +57,11 @@ class TodoDetailActivity : AppCompatActivity() {
             }
             R.id.detail_delete -> {
                 // Todoを削除する
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                     .setTitle("Todoを削除しますか?")
                     .setPositiveButton(R.string.deleteButton) { _, _ ->
                         ToDoModel().delete(applicationContext, todo.createTime) {
-                            AlertDialog.Builder(this)
+                            MaterialAlertDialogBuilder(this)
                                 .setTitle("削除しました")
                                 .setPositiveButton(R.string.closeButton) { _, _ ->
                                     finish()

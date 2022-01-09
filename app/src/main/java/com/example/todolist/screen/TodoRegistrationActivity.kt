@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_todo_registration.*
 import java.util.*
 
@@ -55,7 +56,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 timeTextView.text.toString().isEmpty() ||
                 detailEditText.text.toString().isEmpty()
             ) {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                     .setTitle("未入力の箇所があります")
                     .setNegativeButton(R.string.closeButton, null)
                     .show()
@@ -63,7 +64,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
             }
 
             // Todoを追加、または更新する
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                 .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
                 .setPositiveButton(R.string.yesButton) { _, _ ->
                     if (mode == Mode.Add) {
@@ -88,7 +89,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
             timeTextView.text.toString(),
             detailEditText.text.toString()
         ) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                 .setTitle("登録しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
                     finish()
@@ -109,7 +110,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
             detailEditText.text.toString(),
             todo.createTime
         ) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                 .setTitle("更新しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
                     finish()
