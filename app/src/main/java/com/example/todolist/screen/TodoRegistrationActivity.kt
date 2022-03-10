@@ -45,6 +45,9 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
         setIntentDate()
         setRegisterButton()
+        topAppBar.setNavigationOnClickListener {
+            finish()
+        }
 
 
         var hour: Int = time[0]
@@ -209,8 +212,6 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
-
 
 
 }
