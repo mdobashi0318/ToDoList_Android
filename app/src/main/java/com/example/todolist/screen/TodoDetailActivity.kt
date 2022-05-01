@@ -19,7 +19,50 @@ class TodoDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_detail)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+        topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
+        topAppBar.setOnMenuItemClickListener { item ->
+            // Handle item selection
+            when (item.itemId) {
+                R.id.detail_edit -> {
+                    // Todo編集画面に遷移する
+                    val intent = Intent(this, TodoRegistrationActivity::class.java)
+                    intent.putExtra("mode", Mode.Edit.name)
+                    intent.putExtra("createTime", todo.createTime)
+                    startActivity(intent)
+                    true
+                }
+                R.id.detail_delete -> {
+                    // Todoを削除する
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Todoを削除しますか?")
+                        .setPositiveButton(R.string.deleteButton) { _, _ ->
+                            ToDoModel().delete(applicationContext, todo.createTime) {
+                                MaterialAlertDialogBuilder(this)
+                                    .setTitle("削除しました")
+                                    .setPositiveButton(R.string.closeButton) { _, _ ->
+                                        finish()
+                                    }
+                                    .show()
+                            }
+                        }
+                        .setNegativeButton(R.string.cancelButton, null)
+                        .show()
+                    true
+                }
+                android.R.id.home -> {
+                    /// 前の画面に戻る
+                    finish()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
+
     }
 
 
@@ -37,48 +80,5 @@ class TodoDetailActivity : AppCompatActivity() {
         detailTextView.text = todo.toDoDetail
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.detail_menu, menu)
-        return true
-    }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.detail_edit -> {
-                // Todo編集画面に遷移する
-                val intent = Intent(this, TodoRegistrationActivity::class.java)
-                intent.putExtra("mode", Mode.Edit.name)
-                intent.putExtra("createTime", todo.createTime)
-                startActivity(intent)
-                true
-            }
-            R.id.detail_delete -> {
-                // Todoを削除する
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("Todoを削除しますか?")
-                    .setPositiveButton(R.string.deleteButton) { _, _ ->
-                        ToDoModel().delete(applicationContext, todo.createTime) {
-                            MaterialAlertDialogBuilder(this)
-                                .setTitle("削除しました")
-                                .setPositiveButton(R.string.closeButton) { _, _ ->
-                                    finish()
-                                }
-                                .show()
-                        }
-                    }
-                    .setNegativeButton(R.string.cancelButton, null)
-                    .show()
-                true
-            }
-            android.R.id.home -> {
-                /// 前の画面に戻る
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 }

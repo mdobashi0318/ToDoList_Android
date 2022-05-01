@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TextView
@@ -14,8 +15,17 @@ import androidx.fragment.app.DialogFragment
 import com.example.todolist.other.Mode
 import com.example.todolist.R
 import com.example.todolist.model.ToDoModel
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.android.synthetic.main.activity_todo_registration.*
+import java.lang.String.format
+import java.sql.Date
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.Instant.now
+import java.time.LocalDate.now
 import java.util.*
 
 
@@ -23,23 +33,58 @@ class TodoRegistrationActivity : AppCompatActivity() {
 
     var mode: Mode = Mode.Add
 
-    lateinit var todo: ToDoModel
+    private lateinit var todo: ToDoModel
+
+    /* TimePickerの初期値にセットする */
+    private var time: Array<Int> = arrayOf<Int>(0, 0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_registration)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        datePickerButton.setOnClickListener {
-            DatePickerFragment(dateTextView).show(supportFragmentManager, "datePicker")
-        }
-
-        timePickerButton.setOnClickListener {
-            TimePickerFragment(timeTextView).show(supportFragmentManager, "timePicker")
-        }
-
         setIntentDate()
         setRegisterButton()
+        topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
+
+        var hour: Int = time[0]
+        var minute: Int = time[1]
+
+        timePickerButton.setOnClickListener {
+            val picker =
+                MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(hour)
+                    .setMinute(minute)
+                    .setTitleText("時間を選択してください")
+                    .build()
+
+            picker.addOnPositiveButtonClickListener {
+                hour = picker.hour
+                minute = picker.minute
+                timeTextView.text = "${hour}:${minute}"
+
+            }
+            picker.show(supportFragmentManager, "timePicker")
+        }
+
+        datePickerButton.setOnClickListener {
+            val picker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("日付を選択してください")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
+
+
+            picker.addOnPositiveButtonClickListener {
+                val df = SimpleDateFormat("yyyy/MM/dd")
+                dateTextView.text = df.format(picker.selection)
+            }
+            picker.show(supportFragmentManager, "datePicker")
+        }
     }
 
 
@@ -129,13 +174,19 @@ class TodoRegistrationActivity : AppCompatActivity() {
             }
         }
 
-        intent.getStringExtra("mode")?.let {
+        intent.getStringExtra("mode")?.let { it ->
             if (it == Mode.Edit.name) {
                 mode = Mode.Edit
                 titleEditText.text.append(todo.toDoName)
                 dateTextView.text = todo.todoDate
                 timeTextView.text = todo.todoTime
                 detailEditText.text.append(todo.toDoDetail)
+
+
+                if (todo.todoTime.isNotEmpty()) {
+                    val tmpTime = todo.todoTime.split(":")
+                    time = arrayOf<Int>(tmpTime[0].toInt(), tmpTime[1].toInt())
+                }
             }
         }
     }
@@ -162,50 +213,5 @@ class TodoRegistrationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * TimePickerを設定する
-     */
-    class TimePickerFragment(private var timeTextView: TextView) : DialogFragment(),
-        TimePickerDialog.OnTimeSetListener {
 
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            // Use the current time as the default values for the picker
-            val c = Calendar.getInstance()
-            val hour = c.get(Calendar.HOUR_OF_DAY)
-            val minute = c.get(Calendar.MINUTE)
-
-            // Create a new instance of TimePickerDialog and return it
-            return TimePickerDialog(activity, this, hour, minute, true)
-        }
-
-        override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-            // Do something with the time chosen by the user
-            timeTextView.text = "${hourOfDay}:${minute}"
-        }
-
-
-    }
-
-    /**
-     * DatePickerを設定する
-     */
-    class DatePickerFragment(private var dateTextView: TextView) : DialogFragment(),
-        DatePickerDialog.OnDateSetListener {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            // Use the current date as the default date in the picker
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-
-            // Create a new instance of DatePickerDialog and return it
-            return DatePickerDialog(requireActivity(), this, year, month, day)
-        }
-
-        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-            // Do something with the date chosen by the user
-            dateTextView.text = "${year}/${month + 1}/${day}"
-        }
-    }
 }

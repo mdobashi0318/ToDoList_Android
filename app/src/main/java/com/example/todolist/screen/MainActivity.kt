@@ -1,6 +1,5 @@
 package com.example.todolist.screen
 
-import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -8,15 +7,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.*
 import com.example.todolist.model.ToDoModel
-import com.example.todolist.other.Mode
 import com.example.todolist.uiparts.TodoListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,11 +22,34 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         floatingActionButton.setOnClickListener {
             // Todo作成画面に遷移する
             val intent = Intent(this, TodoRegistrationActivity::class.java)
             startActivity(intent)
+        }
+
+
+        topAppBar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.trash -> {
+                    // Todoを全件削除する
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("全件削除しますか？")
+                        .setPositiveButton(R.string.deleteButton) { _, _ ->
+                            ToDoModel().allDelete(applicationContext) {
+                                MaterialAlertDialogBuilder(this)
+                                    .setTitle("削除しました")
+                                    .setPositiveButton(R.string.closeButton) { _ , _ -> onResume() }
+                                    .show()
+                            }
+
+                        }
+                        .setNegativeButton(R.string.cancelButton) {_ , _->}
+                        .show()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -58,12 +77,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
