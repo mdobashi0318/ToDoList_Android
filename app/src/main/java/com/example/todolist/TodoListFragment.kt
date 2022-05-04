@@ -30,35 +30,7 @@ class TodoListFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener { view: View ->
             // Todo作成画面に遷移する
             view.findNavController()
-                .navigate(R.id.action_todoListFragment_to_todoRegistrationActivity)
-            //TODO todoRegistrationFragmentの作成
-//                .navigate(R.id.action_todoListFragment_to_todoRegistrationFragment)
-
-
-        }
-
-
-        binding.topAppBar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.trash -> {
-                    // Todoを全件削除する
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("全件削除しますか？")
-                        .setPositiveButton(R.string.deleteButton) { _, _ ->
-                            ToDoModel().allDelete(requireContext()) {
-                                MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("削除しました")
-                                    .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
-                                    .show()
-                            }
-
-                        }
-                        .setNegativeButton(R.string.cancelButton) { _, _ -> }
-                        .show()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
+                .navigate(R.id.action_todoListFragment_to_todoRegistrationFragment)
         }
 
         return binding.root
@@ -81,9 +53,8 @@ class TodoListFragment : Fragment() {
      * 選択したTodoの詳細に遷移する
      */
     private fun onClick(todo: ToDoModel) {
-//        val intent = Intent(this, TodoDetailActivity::class.java)
-//        intent.putExtra("todo", todo.createTime)
-//        startActivity(intent)
+// Todo詳細画面に遷移する
+        view?.findNavController()?.navigate(R.id.action_todoListFragment_to_todoDetailFragment)
     }
 
 }

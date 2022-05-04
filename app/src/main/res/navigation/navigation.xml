@@ -8,23 +8,30 @@
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.example.todolist.TodoListFragment"
-        android:label="fragment_todo_list"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_todo_list" >
         <action
             android:id="@+id/action_todoListFragment_to_todoRegistrationFragment"
-            app:destination="@id/todoRegistrationFragment" />
+            app:destination="@id/todoRegistrationFragment"
+            app:popUpTo="@id/todoRegistrationFragment"
+            app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_todoListFragment_to_todoRegistrationActivity"
-            app:destination="@id/todoRegistrationActivity" />
+            android:id="@+id/action_todoListFragment_to_todoDetailFragment"
+            app:destination="@id/todoDetailFragment"
+            app:popUpTo="@id/todoListFragment" />
     </fragment>
     <fragment
         android:id="@+id/todoRegistrationFragment"
         android:name="com.example.todolist.TodoRegistrationFragment"
-        android:label="fragment_todo_registration"
-        tools:layout="@layout/fragment_todo_registration" />
-    <activity
-        android:id="@+id/todoRegistrationActivity"
-        android:name="com.example.todolist.screen.TodoRegistrationActivity"
-        android:label="activity_todo_registration"
-        tools:layout="@layout/activity_todo_registration" />
+        android:label="Todo作成"
+        tools:layout="@layout/fragment_todo_registration" >
+        <action
+            android:id="@+id/action_todoRegistrationFragment_to_todoListFragment"
+            app:destination="@id/todoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/todoDetailFragment"
+        android:name="com.example.todolist.screen.TodoDetailFragment"
+        android:label="@string/todoDetail"
+        tools:layout="@layout/fragment_todo_detail" />
 </navigation>

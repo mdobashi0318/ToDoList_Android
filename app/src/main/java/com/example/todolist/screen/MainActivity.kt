@@ -10,8 +10,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.*
+import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.uiparts.TodoListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,20 +25,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding =
+            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        setSupportActionBar(binding.topAppBar)
+        val navController = this.findNavController(R.id.myNavHostFragment)
+        NavigationUI.setupActionBarWithNavController(this, navController)
 
     }
 
 
-    override fun onResume() {
-        super.onResume()
-
-
-
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.myNavHostFragment)
+        return navController.navigateUp()
     }
-
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
@@ -47,12 +50,12 @@ class MainActivity : AppCompatActivity() {
                         ToDoModel().allDelete(applicationContext) {
                             MaterialAlertDialogBuilder(this)
                                 .setTitle("削除しました")
-                                .setPositiveButton(R.string.closeButton) { _ , _ -> onResume() }
+                                .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
                                 .show()
                         }
 
                     }
-                    .setNegativeButton(R.string.cancelButton) {_ , _->}
+                    .setNegativeButton(R.string.cancelButton) { _, _ -> }
                     .show()
                 true
             }
