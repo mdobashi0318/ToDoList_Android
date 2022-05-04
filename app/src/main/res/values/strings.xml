@@ -10,5 +10,7 @@
     <string name="closeButton">閉じる</string>>
     <string name="yesButton">はい</string>>
     <string name="noButton">いいえ</string>>
-    <string name="cancelButton">キャンセル</string>>
+    <string name="cancelButton">キャンセル</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>>
 </resources>
