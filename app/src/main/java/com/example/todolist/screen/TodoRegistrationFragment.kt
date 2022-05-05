@@ -1,59 +1,60 @@
 package com.example.todolist.screen
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.DateUtils
-import android.view.MenuItem
-import android.widget.DatePicker
-import android.widget.TextView
-import android.widget.TimePicker
-import androidx.fragment.app.DialogFragment
-import com.example.todolist.other.Mode
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
+import com.example.todolist.databinding.FragmentTodoRegistrationBinding
 import com.example.todolist.model.ToDoModel
+import com.example.todolist.other.Mode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.android.synthetic.main.activity_todo_registration.*
-import java.lang.String.format
-import java.sql.Date
-import java.text.DateFormat
+import kotlinx.android.synthetic.main.fragment_todo_registration.*
 import java.text.SimpleDateFormat
-import java.time.Instant.now
-import java.time.LocalDate.now
-import java.util.*
 
 
-class TodoRegistrationActivity : AppCompatActivity() {
+class TodoRegistrationFragment : Fragment() {
 
-    var mode: Mode = Mode.Add
+    private var mode: Mode = Mode.Add
 
-    private lateinit var todo: ToDoModel
+    private lateinit var model: ToDoModel
 
     /* TimePickerの初期値にセットする */
     private var time: Array<Int> = arrayOf<Int>(0, 0)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_todo_registration)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    private lateinit var binding: FragmentTodoRegistrationBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate<FragmentTodoRegistrationBinding>(
+            inflater,
+            R.layout.fragment_todo_registration,
+            container,
+            false
+        )
         setIntentDate()
         setRegisterButton()
-        topAppBar.setNavigationOnClickListener {
-            finish()
-        }
 
+        (activity as AppCompatActivity).supportActionBar?.title = modeMessage(
+            resources.getString(R.string.registration_title_add),
+            resources.getString(R.string.registration_title_edit)
+        )
 
         var hour: Int = time[0]
         var minute: Int = time[1]
 
-        timePickerButton.setOnClickListener {
+        binding.timePickerButton.setOnClickListener {
             val picker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -68,10 +69,10 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 timeTextView.text = "${hour}:${minute}"
 
             }
-            picker.show(supportFragmentManager, "timePicker")
+            picker.show(parentFragmentManager, "timePicker")
         }
 
-        datePickerButton.setOnClickListener {
+        binding.datePickerButton.setOnClickListener {
             val picker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("日付を選択してください")
@@ -83,8 +84,11 @@ class TodoRegistrationActivity : AppCompatActivity() {
                 val df = SimpleDateFormat("yyyy/MM/dd")
                 dateTextView.text = df.format(picker.selection)
             }
-            picker.show(supportFragmentManager, "datePicker")
+            picker.show(parentFragmentManager, "datePicker")
         }
+
+
+        return binding.root
     }
 
 
@@ -92,16 +96,16 @@ class TodoRegistrationActivity : AppCompatActivity() {
      * 登録/更新ボタンの設定をする
      */
     private fun setRegisterButton() {
-        registerButton.text = modeMessage("登録", "更新")
+        binding.registerButton.text = modeMessage("登録", "更新")
 
-        registerButton.setOnClickListener {
+        binding.registerButton.setOnClickListener {
             // 入力されているかのチェック
-            if (titleEditText.text.toString().isEmpty() ||
-                dateTextView.text.toString().isEmpty() ||
-                timeTextView.text.toString().isEmpty() ||
-                detailEditText.text.toString().isEmpty()
+            if (binding.titleEditText.text.toString().isEmpty() ||
+                binding.dateTextView.text.toString().isEmpty() ||
+                binding.timeTextView.text.toString().isEmpty() ||
+                binding.detailEditText.text.toString().isEmpty()
             ) {
-                MaterialAlertDialogBuilder(this)
+                MaterialAlertDialogBuilder(requireContext())
                     .setTitle("未入力の箇所があります")
                     .setNegativeButton(R.string.closeButton, null)
                     .show()
@@ -109,7 +113,7 @@ class TodoRegistrationActivity : AppCompatActivity() {
             }
 
             // Todoを追加、または更新する
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
                 .setPositiveButton(R.string.yesButton) { _, _ ->
                     if (mode == Mode.Add) {
@@ -128,16 +132,17 @@ class TodoRegistrationActivity : AppCompatActivity() {
      */
     private fun addTodo() {
         ToDoModel().add(
-            applicationContext,
-            titleEditText.text.toString(),
-            dateTextView.text.toString(),
-            timeTextView.text.toString(),
-            detailEditText.text.toString()
+            requireContext(),
+            binding.titleEditText.text.toString(),
+            binding.dateTextView.text.toString(),
+            binding.timeTextView.text.toString(),
+            binding.detailEditText.text.toString()
         ) {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle("登録しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
-                    finish()
+                    this.findNavController()
+                        .navigate(R.id.action_todoRegistrationFragment_to_todoListFragment)
                 }
                 .show()
         }
@@ -148,17 +153,22 @@ class TodoRegistrationActivity : AppCompatActivity() {
      */
     private fun updateTodo() {
         ToDoModel().update(
-            applicationContext,
-            titleEditText.text.toString(),
-            dateTextView.text.toString(),
-            timeTextView.text.toString(),
-            detailEditText.text.toString(),
-            todo.createTime
+            requireContext(),
+            binding.titleEditText.text.toString(),
+            binding.dateTextView.text.toString(),
+            binding.timeTextView.text.toString(),
+            binding.detailEditText.text.toString(),
+            model.createTime
         ) {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle("更新しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
-                    finish()
+                    view?.findNavController()
+                        ?.navigate(
+                            TodoRegistrationFragmentDirections.actionTodoRegistrationFragmentToTodoDetailFragment(
+                                model.createTime
+                            )
+                        )
                 }
                 .show()
         }
@@ -168,23 +178,19 @@ class TodoRegistrationActivity : AppCompatActivity() {
      * intentにデータ持っていたらtodoを検索し、テキストにセットする
      */
     private fun setIntentDate() {
-        intent.getStringExtra("createTime")?.let { createTime ->
-            ToDoModel().find(applicationContext, createTime)?.let { result ->
-                todo = result
-            }
-        }
+        val args: TodoRegistrationFragmentArgs by navArgs()
 
-        intent.getStringExtra("mode")?.let { it ->
-            if (it == Mode.Edit.name) {
+        args?.createTime?.let { createTime ->
+            ToDoModel().find(requireContext(), createTime)?.let {
+                model = it
                 mode = Mode.Edit
-                titleEditText.text.append(todo.toDoName)
-                dateTextView.text = todo.todoDate
-                timeTextView.text = todo.todoTime
-                detailEditText.text.append(todo.toDoDetail)
+                binding.titleEditText.text.append(model.toDoName)
+                binding.dateTextView.text = model.todoDate
+                binding.timeTextView.text = model.todoTime
+                binding.detailEditText.text.append(model.toDoDetail)
 
-
-                if (todo.todoTime.isNotEmpty()) {
-                    val tmpTime = todo.todoTime.split(":")
+                if (model.todoTime.isNotEmpty()) {
+                    val tmpTime = model.todoTime.split(":")
                     time = arrayOf<Int>(tmpTime[0].toInt(), tmpTime[1].toInt())
                 }
             }
@@ -203,15 +209,5 @@ class TodoRegistrationActivity : AppCompatActivity() {
             editMessage
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-            true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
 
 }
