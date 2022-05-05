@@ -52,10 +52,11 @@ class TodoDetailFragment : Fragment() {
         return when (item.itemId) {
             R.id.detail_edit -> {
                 // Todo編集画面に遷移する
-//                val intent = Intent(this, TodoRegistrationActivity::class.java)
-//                intent.putExtra("mode", Mode.Edit.name)
-//                intent.putExtra("createTime", todo.createTime)
-//                startActivity(intent)
+                view?.findNavController()?.navigate(
+                    TodoDetailFragmentDirections.actionTodoDetailFragmentToTodoRegistrationFragment(
+                        model.createTime
+                    )
+                )
                 true
             }
             R.id.detail_delete -> {
@@ -67,7 +68,8 @@ class TodoDetailFragment : Fragment() {
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("削除しました")
                                 .setPositiveButton(R.string.closeButton) { _, _ ->
-                                    view?.findNavController()?.navigate(R.id.action_todoDetailFragment_to_todoListFragment)
+                                    view?.findNavController()
+                                        ?.navigate(R.id.action_todoDetailFragment_to_todoListFragment)
                                 }
                                 .show()
                         }

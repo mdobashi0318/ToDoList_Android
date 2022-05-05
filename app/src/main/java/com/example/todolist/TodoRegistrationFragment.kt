@@ -7,10 +7,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todolist.databinding.FragmentTodoRegistrationBinding
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
+import com.example.todolist.screen.TodoDetailFragmentDirections
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -18,37 +21,17 @@ import com.google.android.material.timepicker.TimeFormat
 import kotlinx.android.synthetic.main.activity_todo_registration.*
 import java.text.SimpleDateFormat
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TodoRegistrationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TodoRegistrationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     var mode: Mode = Mode.Add
 
-    private lateinit var todo: ToDoModel
+    private lateinit var model: ToDoModel
 
     /* TimePickerの初期値にセットする */
     private var time: Array<Int> = arrayOf<Int>(0, 0)
 
     private lateinit var binding: FragmentTodoRegistrationBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +43,7 @@ class TodoRegistrationFragment : Fragment() {
             container,
             false
         )
-//        setIntentDate()
+        setIntentDate()
         setRegisterButton()
 
         var hour: Int = time[0]
@@ -103,32 +86,12 @@ class TodoRegistrationFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TodoRegistrationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TodoRegistrationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
 
     /**
      * 登録/更新ボタンの設定をする
      */
     private fun setRegisterButton() {
-        binding.registerButton.text = "登録"//modeMessage("登録", "更新")
+        binding.registerButton.text = modeMessage("登録", "更新")
 
         binding.registerButton.setOnClickListener {
             // 入力されているかのチェック
@@ -190,12 +153,13 @@ class TodoRegistrationFragment : Fragment() {
             binding.dateTextView.text.toString(),
             binding.timeTextView.text.toString(),
             binding.detailEditText.text.toString(),
-            todo.createTime
+            model.createTime
         ) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("更新しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
-//                    finish()
+                    view?.findNavController()
+                        ?.navigate(TodoRegistrationFragmentDirections.actionTodoRegistrationFragmentToTodoDetailFragment(model.createTime))
                 }
                 .show()
         }
@@ -205,28 +169,23 @@ class TodoRegistrationFragment : Fragment() {
      * intentにデータ持っていたらtodoを検索し、テキストにセットする
      */
     private fun setIntentDate() {
+        val args: TodoRegistrationFragmentArgs by navArgs()
 
-//        intent.getStringExtra("createTime")?.let { createTime ->
-//            ToDoModel().find(applicationContext, createTime)?.let { result ->
-//                todo = result
-//            }
-//        }
-//
-//        intent.getStringExtra("mode")?.let { it ->
-//            if (it == Mode.Edit.name) {
-//                mode = Mode.Edit
-//                titleEditText.text.append(todo.toDoName)
-//                dateTextView.text = todo.todoDate
-//                timeTextView.text = todo.todoTime
-//                detailEditText.text.append(todo.toDoDetail)
-//
-//
-//                if (todo.todoTime.isNotEmpty()) {
-//                    val tmpTime = todo.todoTime.split(":")
-//                    time = arrayOf<Int>(tmpTime[0].toInt(), tmpTime[1].toInt())
-//                }
-//            }
-//        }
+        args?.createTime?.let { createTime ->
+            ToDoModel().find(requireContext(), createTime)?.let {
+                model = it
+                mode = Mode.Edit
+                binding.titleEditText.text.append(model.toDoName)
+                binding.dateTextView.text = model.todoDate
+                binding.timeTextView.text = model.todoTime
+                binding.detailEditText.text.append(model.toDoDetail)
+
+                if (model.todoTime.isNotEmpty()) {
+                    val tmpTime = model.todoTime.split(":")
+                    time = arrayOf<Int>(tmpTime[0].toInt(), tmpTime[1].toInt())
+                }
+            }
+        }
     }
 
     /**
