@@ -29,7 +29,7 @@ class TodoListFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener { view: View ->
             // Todo作成画面に遷移する
             view.findNavController()
-                .navigate(R.id.action_todoListFragment_to_todoRegistrationFragment)
+                .navigate(TodoListFragmentDirections.actionTodoListFragmentToTodoRegistrationFragment(null))
         }
 
         return binding.root
