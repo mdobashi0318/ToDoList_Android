@@ -1,12 +1,12 @@
-package com.example.todolist
+package com.example.todolist.screen
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.uiparts.TodoListAdapter
