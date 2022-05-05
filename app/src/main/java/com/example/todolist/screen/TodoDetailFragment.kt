@@ -1,60 +1,84 @@
 package com.example.todolist.screen
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
+import com.example.todolist.databinding.FragmentTodoDetailBinding
+import com.example.todolist.model.ToDoModel
+import com.example.todolist.other.Mode
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TodoDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TodoDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentTodoDetailBinding
+    private lateinit var model: ToDoModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo_detail, container, false)
+        setHasOptionsMenu(true)
+        val args: TodoDetailFragmentArgs by navArgs()
+        binding = DataBindingUtil.inflate<FragmentTodoDetailBinding>(
+            inflater,
+            R.layout.fragment_todo_detail,
+            container,
+            false
+        )
+        ToDoModel().find(requireContext(), args.createTime)?.let {
+            model = it
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TodoDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TodoDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        binding.titleTextView.text = model.toDoName
+        binding.dateTextView.text = model.todoDate
+        binding.detailLabel.text = model.toDoDetail
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.detail_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.detail_edit -> {
+                // Todo編集画面に遷移する
+//                val intent = Intent(this, TodoRegistrationActivity::class.java)
+//                intent.putExtra("mode", Mode.Edit.name)
+//                intent.putExtra("createTime", todo.createTime)
+//                startActivity(intent)
+                true
+            }
+            R.id.detail_delete -> {
+                // Todoを削除する
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Todoを削除しますか?")
+                    .setPositiveButton(R.string.deleteButton) { _, _ ->
+                        ToDoModel().delete(requireContext(), model.createTime) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("削除しました")
+                                .setPositiveButton(R.string.closeButton) { _, _ ->
+                                    view?.findNavController()?.navigate(R.id.action_todoDetailFragment_to_todoListFragment)
+                                }
+                                .show()
+                        }
+                    }
+                    .setNegativeButton(R.string.cancelButton, null)
+                    .show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 }

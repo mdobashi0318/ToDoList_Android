@@ -33,5 +33,12 @@
         android:id="@+id/todoDetailFragment"
         android:name="com.example.todolist.screen.TodoDetailFragment"
         android:label="@string/todoDetail"
-        tools:layout="@layout/fragment_todo_detail" />
+        tools:layout="@layout/fragment_todo_detail" >
+        <argument
+            android:name="createTime"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_todoDetailFragment_to_todoListFragment"
+            app:destination="@id/todoListFragment" />
+    </fragment>
 </navigation>

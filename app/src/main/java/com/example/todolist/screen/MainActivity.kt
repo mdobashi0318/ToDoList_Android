@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.topAppBar)
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
-
     }
 
 
@@ -39,29 +38,6 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.trash -> {
-                // Todoを全件削除する
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("全件削除しますか？")
-                    .setPositiveButton(R.string.deleteButton) { _, _ ->
-                        ToDoModel().allDelete(applicationContext) {
-                            MaterialAlertDialogBuilder(this)
-                                .setTitle("削除しました")
-                                .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
-                                .show()
-                        }
-
-                    }
-                    .setNegativeButton(R.string.cancelButton) { _, _ -> }
-                    .show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
     companion object {
         private const val NOTIFICATION_CHANNEL_ID = "com.example.todolist"

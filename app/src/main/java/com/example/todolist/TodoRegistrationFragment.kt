@@ -242,10 +242,4 @@ class TodoRegistrationFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-
-        return super.onOptionsItemSelected(item)
-    }
-
 }
