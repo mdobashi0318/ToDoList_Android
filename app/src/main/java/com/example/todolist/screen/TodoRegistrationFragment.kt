@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat
 
 class TodoRegistrationFragment : Fragment() {
 
-    var mode: Mode = Mode.Add
+    private var mode: Mode = Mode.Add
 
     private lateinit var model: ToDoModel
 
@@ -44,6 +45,11 @@ class TodoRegistrationFragment : Fragment() {
         )
         setIntentDate()
         setRegisterButton()
+
+        (activity as AppCompatActivity).supportActionBar?.title = modeMessage(
+            resources.getString(R.string.registration_title_add),
+            resources.getString(R.string.registration_title_edit)
+        )
 
         var hour: Int = time[0]
         var minute: Int = time[1]
@@ -158,7 +164,11 @@ class TodoRegistrationFragment : Fragment() {
                 .setTitle("更新しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
                     view?.findNavController()
-                        ?.navigate(TodoRegistrationFragmentDirections.actionTodoRegistrationFragmentToTodoDetailFragment(model.createTime))
+                        ?.navigate(
+                            TodoRegistrationFragmentDirections.actionTodoRegistrationFragmentToTodoDetailFragment(
+                                model.createTime
+                            )
+                        )
                 }
                 .show()
         }

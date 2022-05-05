@@ -23,7 +23,6 @@
     <fragment
         android:id="@+id/todoRegistrationFragment"
         android:name="com.example.todolist.screen.TodoRegistrationFragment"
-        android:label="Todo作成"
         tools:layout="@layout/fragment_todo_registration" >
         <action
             android:id="@+id/action_todoRegistrationFragment_to_todoListFragment"
