@@ -31,16 +31,11 @@ class TodoDetailFragment : Fragment() {
         )
         ToDoModel().find(requireContext(), args.createTime)?.let {
             model = it
+            binding.titleTextView.text = model.toDoName
+            binding.dateTextView.text = model.todoDate
+            binding.detailTextView.text = model.toDoDetail
         }
-
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.titleTextView.text = model.toDoName
-        binding.dateTextView.text = model.todoDate
-        binding.detailLabel.text = model.toDoDetail
     }
 
 
