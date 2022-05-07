@@ -2,6 +2,7 @@ package com.example.todolist.screen
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
@@ -29,7 +30,11 @@ class TodoListFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener { view: View ->
             // Todo作成画面に遷移する
             view.findNavController()
-                .navigate(TodoListFragmentDirections.actionTodoListFragmentToTodoRegistrationFragment(null))
+                .navigate(
+                    TodoListFragmentDirections.actionTodoListFragmentToTodoRegistrationFragment(
+                        null
+                    )
+                )
         }
 
         return binding.root
@@ -42,10 +47,21 @@ class TodoListFragment : Fragment() {
         var todoModel = ToDoModel().findAll(requireContext())
         val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
         val layoutManager = LinearLayoutManager(requireContext())
-        // アダプターとレイアウトマネージャーをセット
-        binding.todoRecyclerView.layoutManager = layoutManager
-        binding.todoRecyclerView.adapter = adapter
-        binding.todoRecyclerView.setHasFixedSize(true)
+
+        if (todoModel.isEmpty()) {
+            binding.emptyTextView.isVisible = true
+            binding.todoRecyclerView.isVisible = false
+            return
+        } else {
+            binding.emptyTextView.isVisible = false
+            binding.todoRecyclerView.isVisible = true
+            // アダプターとレイアウトマネージャーをセット
+            binding.todoRecyclerView.layoutManager = layoutManager
+            binding.todoRecyclerView.adapter = adapter
+            binding.todoRecyclerView.setHasFixedSize(true)
+        }
+
+
     }
 
 

@@ -203,11 +203,7 @@ class TodoRegistrationFragment : Fragment() {
      * @param editMessage modeがEditの時に返すテキスト
      */
     private fun modeMessage(addMessage: String, editMessage: String): String {
-        return if (mode == Mode.Add) {
-            addMessage
-        } else {
-            editMessage
-        }
+        return if (mode == Mode.Add) addMessage else editMessage
     }
 
 }
