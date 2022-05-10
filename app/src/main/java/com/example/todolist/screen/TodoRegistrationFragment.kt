@@ -7,18 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoRegistrationBinding
+import com.example.todolist.model.RegistrationViewModel
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.android.synthetic.main.fragment_todo_registration.*
 import java.text.SimpleDateFormat
 
 
@@ -26,10 +28,7 @@ class TodoRegistrationFragment : Fragment() {
 
     private var mode: Mode = Mode.Add
 
-    private lateinit var model: ToDoModel
-
-    /* TimePickerの初期値にセットする */
-    private var time: Array<Int> = arrayOf<Int>(0, 0)
+    private val viewModel: RegistrationViewModel by viewModels()
 
     private lateinit var binding: FragmentTodoRegistrationBinding
 
@@ -43,7 +42,7 @@ class TodoRegistrationFragment : Fragment() {
             container,
             false
         )
-        setIntentDate()
+        setObserver()
         setRegisterButton()
 
         (activity as AppCompatActivity).supportActionBar?.title = modeMessage(
@@ -51,23 +50,18 @@ class TodoRegistrationFragment : Fragment() {
             resources.getString(R.string.registration_title_edit)
         )
 
-        var hour: Int = time[0]
-        var minute: Int = time[1]
 
         binding.timePickerButton.setOnClickListener {
             val picker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
-                    .setHour(hour)
-                    .setMinute(minute)
+                    .setHour(viewModel.hour)
+                    .setMinute(viewModel.min)
                     .setTitleText("時間を選択してください")
                     .build()
 
             picker.addOnPositiveButtonClickListener {
-                hour = picker.hour
-                minute = picker.minute
-                timeTextView.text = "${hour}:${minute}"
-
+                viewModel.setTime(picker.hour, picker.minute)
             }
             picker.show(parentFragmentManager, "timePicker")
         }
@@ -82,11 +76,10 @@ class TodoRegistrationFragment : Fragment() {
 
             picker.addOnPositiveButtonClickListener {
                 val df = SimpleDateFormat("yyyy/MM/dd")
-                dateTextView.text = df.format(picker.selection)
+                viewModel.setData(df.format(picker.selection))
             }
             picker.show(parentFragmentManager, "datePicker")
         }
-
 
         return binding.root
     }
@@ -158,7 +151,7 @@ class TodoRegistrationFragment : Fragment() {
             binding.dateTextView.text.toString(),
             binding.timeTextView.text.toString(),
             binding.detailEditText.text.toString(),
-            model.createTime
+            viewModel.getCreateTime
         ) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("更新しました")
@@ -166,7 +159,7 @@ class TodoRegistrationFragment : Fragment() {
                     view?.findNavController()
                         ?.navigate(
                             TodoRegistrationFragmentDirections.actionTodoRegistrationFragmentToTodoDetailFragment(
-                                model.createTime
+                                viewModel.getCreateTime
                             )
                         )
                 }
@@ -175,26 +168,31 @@ class TodoRegistrationFragment : Fragment() {
     }
 
     /**
-     * intentにデータ持っていたらtodoを検索し、テキストにセットする
+     * Observerをセットする
      */
-    private fun setIntentDate() {
+    private fun setObserver() {
         val args: TodoRegistrationFragmentArgs by navArgs()
-
-        args?.createTime?.let { createTime ->
-            ToDoModel().find(requireContext(), createTime)?.let {
-                model = it
-                mode = Mode.Edit
-                binding.titleEditText.text.append(model.toDoName)
-                binding.dateTextView.text = model.todoDate
-                binding.timeTextView.text = model.todoTime
-                binding.detailEditText.text.append(model.toDoDetail)
-
-                if (model.todoTime.isNotEmpty()) {
-                    val tmpTime = model.todoTime.split(":")
-                    time = arrayOf<Int>(tmpTime[0].toInt(), tmpTime[1].toInt())
-                }
-            }
+        viewModel.setModel(requireContext(), args.createTime)
+        val titleObserver = Observer { title: String ->
+            binding.titleEditText.append(title)
         }
+
+        val detailObserver = Observer { title: String ->
+            binding.detailEditText.append(title)
+        }
+
+        val dateObserver = Observer { title: String ->
+            binding.dateTextView.append(title)
+        }
+
+        val timeObserver = Observer { title: String ->
+            binding.timeTextView.append(title)
+        }
+
+        viewModel.toDoName.observe(viewLifecycleOwner, titleObserver)
+        viewModel.toDoDetail.observe(viewLifecycleOwner, detailObserver)
+        viewModel.todoDate.observe(viewLifecycleOwner, dateObserver)
+        viewModel.todoTime.observe(viewLifecycleOwner, timeObserver)
     }
 
     /**
