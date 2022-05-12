@@ -3,6 +3,7 @@ package com.example.todolist.model
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.todolist.other.Mode
 
 
 class RegistrationViewModel() : ViewModel() {
@@ -23,6 +24,9 @@ class RegistrationViewModel() : ViewModel() {
         MutableLiveData<String>()
     }
 
+    private var mode: Mode = Mode.Add
+    val getMode: Mode get() = mode
+
     private var time: MutableMap<String, Int> = mutableMapOf("hour" to 0, "min" to 0)
 
     var hour: Int
@@ -41,6 +45,7 @@ class RegistrationViewModel() : ViewModel() {
         createTime?.let { createTime: String ->
             this.createTime = createTime
             ToDoModel().find(context, createTime)?.let { todo: ToDoModel ->
+                mode = Mode.Edit
                 toDoName.value = todo.toDoName
                 todoDate.value = todo.todoDate
                 todoTime.value = todo.todoTime

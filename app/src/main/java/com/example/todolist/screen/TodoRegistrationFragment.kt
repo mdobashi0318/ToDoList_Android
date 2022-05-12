@@ -26,8 +26,6 @@ import java.text.SimpleDateFormat
 
 class TodoRegistrationFragment : Fragment() {
 
-    private var mode: Mode = Mode.Add
-
     private val viewModel: RegistrationViewModel by viewModels()
 
     private lateinit var binding: FragmentTodoRegistrationBinding
@@ -109,7 +107,7 @@ class TodoRegistrationFragment : Fragment() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
                 .setPositiveButton(R.string.yesButton) { _, _ ->
-                    if (mode == Mode.Add) {
+                    if (viewModel.getMode == Mode.Add) {
                         addTodo()
                     } else {
                         updateTodo()
@@ -124,6 +122,7 @@ class TodoRegistrationFragment : Fragment() {
      * Todoを新規作成する
      */
     private fun addTodo() {
+
         ToDoModel().add(
             requireContext(),
             binding.titleEditText.text.toString(),
@@ -174,19 +173,19 @@ class TodoRegistrationFragment : Fragment() {
         val args: TodoRegistrationFragmentArgs by navArgs()
         viewModel.setModel(requireContext(), args.createTime)
         val titleObserver = Observer { title: String ->
-            binding.titleEditText.append(title)
+            binding.titleEditText.setText(title)
         }
 
-        val detailObserver = Observer { title: String ->
-            binding.detailEditText.append(title)
+        val detailObserver = Observer { detail: String ->
+            binding.detailEditText.setText(detail)
         }
 
-        val dateObserver = Observer { title: String ->
-            binding.dateTextView.append(title)
+        val dateObserver = Observer { date: String ->
+            binding.dateTextView.text = date
         }
 
-        val timeObserver = Observer { title: String ->
-            binding.timeTextView.append(title)
+        val timeObserver = Observer { time: String ->
+            binding.timeTextView.text = time
         }
 
         viewModel.toDoName.observe(viewLifecycleOwner, titleObserver)
@@ -201,7 +200,7 @@ class TodoRegistrationFragment : Fragment() {
      * @param editMessage modeがEditの時に返すテキスト
      */
     private fun modeMessage(addMessage: String, editMessage: String): String {
-        return if (mode == Mode.Add) addMessage else editMessage
+        return if (viewModel.getMode == Mode.Add) addMessage else editMessage
     }
 
 }
