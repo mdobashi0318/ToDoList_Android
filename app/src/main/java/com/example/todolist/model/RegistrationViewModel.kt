@@ -3,6 +3,7 @@ package com.example.todolist.model
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.todolist.extensions.addFirstZero
 import com.example.todolist.other.Mode
 
 
@@ -48,14 +49,12 @@ class RegistrationViewModel() : ViewModel() {
                 mode = Mode.Edit
                 toDoName.value = todo.toDoName
                 todoDate.value = todo.todoDate
-                todoTime.value = todo.todoTime
                 toDoDetail.value = todo.toDoDetail
 
-                if (todo.todoTime.isNotEmpty()) {
-                    val tmpTime = todo.todoTime.split(":")
-                    hour = tmpTime[0].toInt()
-                    min = tmpTime[1].toInt()
-                }
+                val tmpTime = todo.todoTime.split(":")
+                hour = tmpTime[0].toInt()
+                min = tmpTime[1].toInt()
+                todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
             }
         }
     }
@@ -67,7 +66,7 @@ class RegistrationViewModel() : ViewModel() {
     fun setTime(hour: Int, min: Int) {
         this.hour = hour
         this.min = min
-        todoTime.value = "${this.hour}:${this.min}"
+        todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
     }
 
 }
