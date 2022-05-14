@@ -32,7 +32,7 @@ class TodoDetailFragment : Fragment() {
         ToDoModel().find(requireContext(), args.createTime)?.let {
             model = it
             binding.titleTextView.text = model.toDoName
-            binding.dateTextView.text = model.todoDate
+            binding.dateTextView.text = model.todoDate + "\n" + model.todoTime
             binding.detailTextView.text = model.toDoDetail
         }
         return binding.root
