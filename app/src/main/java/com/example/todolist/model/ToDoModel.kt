@@ -4,12 +4,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import com.example.todolist.other.Receiver
-import com.example.todolist.screen.MainActivity
-import io.realm.R
+import com.example.todolist.other.*
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
@@ -25,10 +22,16 @@ open class ToDoModel : RealmObject() {
     var todoDate: String = ""
     var todoTime: String = ""
     var toDoDetail: String = ""
+    var completionFlag: String = ""
 
 
     private fun initRealm(context: Context): Realm {
         Realm.init(context)
+        val config = RealmConfiguration.Builder()
+                // TODO
+            .schemaVersion(1L)
+            .build()
+        Realm.setDefaultConfiguration(config)
         return Realm.getDefaultInstance()
     }
 
@@ -72,12 +75,15 @@ open class ToDoModel : RealmObject() {
         val realm = initRealm(context)
         val format = SimpleDateFormat("MMddHHmmS")
         val createTime = format.format(Date())
+        var completionFlag = CompletionFlag.Unfinished
+
         realm.executeTransaction {
             var todo = realm.createObject<ToDoModel>(createTime)
             todo.toDoName = toDoName
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
+            todo.completionFlag = completionFlag.getCompletionString()
         }
 
 

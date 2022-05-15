@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoDetailBinding
 import com.example.todolist.model.ToDoModel
+import com.example.todolist.other.CompletionFlag
 import com.example.todolist.other.Mode
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -34,6 +35,11 @@ class TodoDetailFragment : Fragment() {
             binding.titleTextView.text = model.toDoName
             binding.dateTextView.text = model.todoDate + "\n" + model.todoTime
             binding.detailTextView.text = model.toDoDetail
+            binding.completeSwitch.isChecked = CompletionFlag.getCompletionFlag(model.completionFlag)
+        }
+
+        binding.completeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            println("getCompletionFlag: ${CompletionFlag.getCompletionFlag(isChecked)}")
         }
         return binding.root
     }
