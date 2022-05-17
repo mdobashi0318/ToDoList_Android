@@ -144,6 +144,37 @@ open class ToDoModel : RealmObject() {
         success()
     }
 
+
+    fun updateFlag(
+        context: Context,
+        createTime: String,
+        flag: Boolean
+    ) {
+        val realm = initRealm(context)
+        var todo = find(context, createTime) ?: return
+        var completionFlag = CompletionFlag.getCompletionFlag(flag)
+
+        realm.executeTransaction {
+            todo.completionFlag = completionFlag.getCompletionString()
+        }
+
+        if(CompletionFlag.getCompletionFlag(completionFlag.getCompletionString())) {
+            cancelNotification(context, createTime.toInt())
+        } else {
+            val dateList = todo.todoDate.split("/")
+            val timeList = todo.todoTime.split(":")
+            setNotification(
+                context,
+                dateList[1].toInt(),
+                dateList[2].toInt(),
+                timeList[0].toInt(),
+                timeList[1].toInt(),
+                createTime.toInt()
+            )
+        }
+
+    }
+
     /**
      * Todoを全件削除する
      * @param context

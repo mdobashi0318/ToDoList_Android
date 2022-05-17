@@ -39,7 +39,7 @@ class TodoDetailFragment : Fragment() {
         }
 
         binding.completeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            println("getCompletionFlag: ${CompletionFlag.getCompletionFlag(isChecked)}")
+            ToDoModel().updateFlag(requireContext(), model.createTime, isChecked)
         }
         return binding.root
     }
