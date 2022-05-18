@@ -123,13 +123,14 @@ open class ToDoModel : RealmObject() {
         val realm = initRealm(context)
         var todo = find(context, createTime)
         if (todo == null) return
-
+        var completionFlag = CompletionFlag.Unfinished
 
         realm.executeTransaction {
             todo.toDoName = toDoName
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
+            todo.completionFlag = completionFlag.getCompletionString()
         }
         val dateList = date.split("/")
         val timeList = time.split(":")
