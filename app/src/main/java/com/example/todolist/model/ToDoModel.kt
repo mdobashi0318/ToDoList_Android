@@ -24,15 +24,15 @@ open class ToDoModel : RealmObject() {
     companion object {
 
         fun initRealm(context: Context): Realm {
-            return Realm.getInstance(getConfig(context));
+            Realm.init(context)
+            return Realm.getInstance(getConfig(context))
         }
 
         private fun getConfig(context: Context): RealmConfiguration {
-            val defaultConfig = RealmConfiguration.Builder()
+            return RealmConfiguration.Builder()
                 .schemaVersion(1)
                 .migration(Migration())
-                .build();
-            return defaultConfig;
+                .build()
         }
     }
 
