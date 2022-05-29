@@ -5,10 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.example.todolist.other.*
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmObject
-import io.realm.RealmResults
+import io.realm.*
 import io.realm.annotations.PrimaryKey
 import io.realm.kotlin.createObject
 import java.text.SimpleDateFormat
@@ -24,15 +21,19 @@ open class ToDoModel : RealmObject() {
     var toDoDetail: String = ""
     var completionFlag: String = ""
 
+    companion object {
 
-    private fun initRealm(context: Context): Realm {
-        Realm.init(context)
-        val config = RealmConfiguration.Builder()
-                // TODO
-            .schemaVersion(1L)
-            .build()
-        Realm.setDefaultConfiguration(config)
-        return Realm.getDefaultInstance()
+        fun initRealm(context: Context): Realm {
+            return Realm.getInstance(getConfig(context));
+        }
+
+        private fun getConfig(context: Context): RealmConfiguration {
+            val defaultConfig = RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .migration(Migration())
+                .build();
+            return defaultConfig;
+        }
     }
 
     /**
@@ -159,7 +160,7 @@ open class ToDoModel : RealmObject() {
             todo.completionFlag = completionFlag.getCompletionString()
         }
 
-        if(CompletionFlag.getCompletionFlag(completionFlag.getCompletionString())) {
+        if (CompletionFlag.getCompletionFlag(completionFlag.getCompletionString())) {
             cancelNotification(context, createTime.toInt())
         } else {
             val dateList = todo.todoDate.split("/")
