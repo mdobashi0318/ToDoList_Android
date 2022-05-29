@@ -4,14 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import com.example.todolist.other.Receiver
-import com.example.todolist.screen.MainActivity
-import io.realm.R
-import io.realm.Realm
-import io.realm.RealmObject
-import io.realm.RealmResults
+import com.example.todolist.other.*
+import io.realm.*
 import io.realm.annotations.PrimaryKey
 import io.realm.kotlin.createObject
 import java.text.SimpleDateFormat
@@ -25,11 +19,21 @@ open class ToDoModel : RealmObject() {
     var todoDate: String = ""
     var todoTime: String = ""
     var toDoDetail: String = ""
+    var completionFlag: String = ""
 
+    companion object {
 
-    private fun initRealm(context: Context): Realm {
-        Realm.init(context)
-        return Realm.getDefaultInstance()
+        fun initRealm(context: Context): Realm {
+            Realm.init(context)
+            return Realm.getInstance(getConfig(context))
+        }
+
+        private fun getConfig(context: Context): RealmConfiguration {
+            return RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .migration(Migration())
+                .build()
+        }
     }
 
     /**
@@ -72,12 +76,15 @@ open class ToDoModel : RealmObject() {
         val realm = initRealm(context)
         val format = SimpleDateFormat("MMddHHmmS")
         val createTime = format.format(Date())
+        var completionFlag = CompletionFlag.Unfinished
+
         realm.executeTransaction {
             var todo = realm.createObject<ToDoModel>(createTime)
             todo.toDoName = toDoName
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
+            todo.completionFlag = completionFlag.getCompletionString()
         }
 
 
@@ -117,13 +124,14 @@ open class ToDoModel : RealmObject() {
         val realm = initRealm(context)
         var todo = find(context, createTime)
         if (todo == null) return
-
+        var completionFlag = CompletionFlag.Unfinished
 
         realm.executeTransaction {
             todo.toDoName = toDoName
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
+            todo.completionFlag = completionFlag.getCompletionString()
         }
         val dateList = date.split("/")
         val timeList = time.split(":")
@@ -136,6 +144,37 @@ open class ToDoModel : RealmObject() {
             createTime.toInt()
         )
         success()
+    }
+
+
+    fun updateFlag(
+        context: Context,
+        createTime: String,
+        flag: Boolean
+    ) {
+        val realm = initRealm(context)
+        var todo = find(context, createTime) ?: return
+        var completionFlag = CompletionFlag.getCompletionFlag(flag)
+
+        realm.executeTransaction {
+            todo.completionFlag = completionFlag.getCompletionString()
+        }
+
+        if (CompletionFlag.getCompletionFlag(completionFlag.getCompletionString())) {
+            cancelNotification(context, createTime.toInt())
+        } else {
+            val dateList = todo.todoDate.split("/")
+            val timeList = todo.todoTime.split(":")
+            setNotification(
+                context,
+                dateList[1].toInt(),
+                dateList[2].toInt(),
+                timeList[0].toInt(),
+                timeList[1].toInt(),
+                createTime.toInt()
+            )
+        }
+
     }
 
     /**
