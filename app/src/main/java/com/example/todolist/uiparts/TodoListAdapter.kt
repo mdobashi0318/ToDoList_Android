@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.extensions.addFirstZero
 import com.example.todolist.model.ToDoModel
+import com.example.todolist.other.CompletionFlag
 import kotlinx.android.synthetic.main.activity_todo_recycler_view_item.view.*
 
 class TodoListAdapter(
@@ -29,6 +30,7 @@ class TodoListAdapter(
 
         fun bind(todo: ToDoModel) {
             view.title.text = todo.toDoName
+            view.complete.text = if(CompletionFlag.getCompletionFlag(todo.completionFlag)) "完了" else "未完了"
 
             var hour: String
             var min: String
