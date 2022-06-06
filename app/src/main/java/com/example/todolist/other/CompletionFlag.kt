@@ -1,17 +1,11 @@
 package com.example.todolist.other
 
-enum class CompletionFlag {
-    /// 未完
-    /// "0"
-    Unfinished,
+enum class CompletionFlag(val value: String) {
+    /** 未完 */
+    Unfinished("0"),
 
-    /// 完了
-    /// "1"
-    Completion;
-
-
-    fun getCompletionString(): String =
-        if (Unfinished == this) "0" else "1"
+    /** 完了 */
+    Completion("1");
 
 
     companion object {
@@ -19,7 +13,7 @@ enum class CompletionFlag {
             if (boolean) Completion else Unfinished
 
         fun getCompletionFlag(str: String): Boolean =
-            str == "1"
+            str == Completion.value
     }
 }
 

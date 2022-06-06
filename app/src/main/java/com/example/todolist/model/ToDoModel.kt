@@ -84,7 +84,7 @@ open class ToDoModel : RealmObject() {
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
-            todo.completionFlag = completionFlag.getCompletionString()
+            todo.completionFlag = completionFlag.value
         }
 
 
@@ -131,7 +131,7 @@ open class ToDoModel : RealmObject() {
             todo.todoDate = date
             todo.todoTime = time
             todo.toDoDetail = toDoDetail
-            todo.completionFlag = completionFlag.getCompletionString()
+            todo.completionFlag = completionFlag.value
         }
         val dateList = date.split("/")
         val timeList = time.split(":")
@@ -157,10 +157,10 @@ open class ToDoModel : RealmObject() {
         var completionFlag = CompletionFlag.getCompletionFlag(flag)
 
         realm.executeTransaction {
-            todo.completionFlag = completionFlag.getCompletionString()
+            todo.completionFlag = completionFlag.value
         }
 
-        if (CompletionFlag.getCompletionFlag(completionFlag.getCompletionString())) {
+        if (CompletionFlag.getCompletionFlag(completionFlag.value)) {
             cancelNotification(context, createTime.toInt())
         } else {
             val dateList = todo.todoDate.split("/")
