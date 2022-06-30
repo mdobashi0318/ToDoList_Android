@@ -12,6 +12,8 @@
     <string name="noButton">いいえ</string>>
     <string name="cancelButton">キャンセル</string>
 
+    <string name="emptyText">Todoがありません</string>
+
     <string name="registration_title_add">Todo作成</string>
     <string name="registration_title_edit">Todo編集</string>
 </resources>
