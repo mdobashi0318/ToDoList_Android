@@ -2,6 +2,7 @@ package com.example.todolist.screen
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -20,6 +21,7 @@ class TodoListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.app_name)
         setHasOptionsMenu(true)
         binding = DataBindingUtil.inflate(
             inflater,
@@ -31,7 +33,7 @@ class TodoListFragment : Fragment() {
             // Todo作成画面に遷移する
             view.findNavController()
                 .navigate(
-                    TodoListFragmentDirections.actionTodoListFragmentToTodoRegistrationFragment(
+                    TabFragmentDirections.actionTabFragmentToTodoRegistrationFragment(
                         null
                     )
                 )
@@ -98,7 +100,7 @@ class TodoListFragment : Fragment() {
     private fun onClick(todo: ToDoModel) {
 /// Todo詳細画面に遷移する
         view?.findNavController()
-            ?.navigate(TodoListFragmentDirections.actionTodoListFragmentToTodoDetailFragment(todo.createTime))
+            ?.navigate(TabFragmentDirections.actionTabFragmentToTodoDetailFragment(todo.createTime))
     }
 
 }

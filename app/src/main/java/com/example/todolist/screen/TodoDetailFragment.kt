@@ -70,7 +70,7 @@ class TodoDetailFragment : Fragment() {
                                 .setTitle("削除しました")
                                 .setPositiveButton(R.string.closeButton) { _, _ ->
                                     view?.findNavController()
-                                        ?.navigate(R.id.action_todoDetailFragment_to_todoListFragment)
+                                        ?.navigate(R.id.action_todoRegistrationFragment_to_tabFragment)
                                 }
                                 .show()
                         }
