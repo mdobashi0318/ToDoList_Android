@@ -25,7 +25,8 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_todoRegistrationFragment_to_tabFragment"
-            app:destination="@id/tabFragment" />
+            app:destination="@id/tabFragment"
+            app:popUpTo="@id/tabFragment" />
     </fragment>
     <fragment
         android:id="@+id/todoDetailFragment"
@@ -49,9 +50,11 @@
         tools:layout="@layout/fragment_tab" >
         <action
             android:id="@+id/action_tabFragment_to_todoRegistrationFragment"
-            app:destination="@id/todoRegistrationFragment" />
+            app:destination="@id/todoRegistrationFragment"
+            app:popUpTo="@id/tabFragment" />
         <action
             android:id="@+id/action_tabFragment_to_todoDetailFragment"
-            app:destination="@id/todoDetailFragment" />
+            app:destination="@id/todoDetailFragment"
+            app:popUpTo="@id/tabFragment" />
     </fragment>
 </navigation>
