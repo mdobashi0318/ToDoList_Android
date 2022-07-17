@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.model.ToDoModel
+import com.example.todolist.other.CompletionFlag
 import com.example.todolist.uiparts.TodoListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class TodoListFragment : Fragment() {
+class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
     private lateinit var binding: FragmentTodoListBinding
 
     override fun onCreateView(
@@ -46,7 +47,7 @@ class TodoListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        var todoModel = ToDoModel().findAll(requireContext())
+        var todoModel = ToDoModel().findTodos(requireContext(), flag)
         val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
         val layoutManager = LinearLayoutManager(requireContext())
 

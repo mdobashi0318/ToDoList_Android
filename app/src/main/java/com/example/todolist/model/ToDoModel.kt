@@ -40,10 +40,22 @@ open class ToDoModel : RealmObject() {
      * Todoを全件検索する
      * @param context
      */
-    fun findAll(context: Context): RealmResults<ToDoModel> {
+    private fun findAll(context: Context): RealmResults<ToDoModel> {
         val realm = initRealm(context)
         return realm.where(ToDoModel::class.java).findAll()
     }
+
+
+    /**
+     * 設定したCompletionFlagのTodoを全件検索する
+     * @param context
+     * @param flag 取得したいCompletionFlag
+     */
+    fun findTodos(context: Context, flag: CompletionFlag): RealmResults<ToDoModel> {
+        val realm = initRealm(context)
+        return realm.where(ToDoModel::class.java).equalTo("completionFlag", flag.value).findAll()
+    }
+
 
     /**
      * Todoを１件検索する

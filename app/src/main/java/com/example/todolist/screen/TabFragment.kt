@@ -11,22 +11,22 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTabBinding
+import com.example.todolist.other.CompletionFlag
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
 
 class TabFragment : Fragment() {
+
     private lateinit var tabAdapter: TabAdapter
     private lateinit var viewPager: ViewPager2
-
-
     private lateinit var binding: FragmentTabBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = DataBindingUtil.inflate<FragmentTabBinding>(
             inflater,
             R.layout.fragment_tab,
@@ -55,7 +55,8 @@ class TabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        /// TODO TodoListFragment()に完了か未完了のTodoを呼び出すようにする
-        return TodoListFragment()
+        return if (position == 0) TodoListFragment(CompletionFlag.Unfinished) else TodoListFragment(
+            CompletionFlag.Completion
+        )
     }
 }
