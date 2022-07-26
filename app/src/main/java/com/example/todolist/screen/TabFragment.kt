@@ -27,6 +27,7 @@ class TabFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         binding = DataBindingUtil.inflate<FragmentTabBinding>(
             inflater,
             R.layout.fragment_tab,
@@ -37,8 +38,8 @@ class TabFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tabAdapter = TabAdapter(this)
         viewPager = view.findViewById(R.id.pager)
+        tabAdapter = TabAdapter(this)
         viewPager.adapter = tabAdapter
 
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
@@ -47,6 +48,39 @@ class TabFragment : Fragment() {
         }.attach()
     }
 
+    override fun onResume() {
+        super.onResume()
+        tabAdapter = TabAdapter(this)
+        viewPager.adapter = tabAdapter
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.trash -> {
+                // Todoを全件削除する
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("全件削除しますか？")
+                    .setPositiveButton(R.string.deleteButton) { _, _ ->
+                        ToDoModel().allDelete(requireContext()) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("削除しました")
+                                .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
+                                .show()
+                        }
+
+                    }
+                    .setNegativeButton(R.string.cancelButton) { _, _ -> }
+                    .show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
 
 

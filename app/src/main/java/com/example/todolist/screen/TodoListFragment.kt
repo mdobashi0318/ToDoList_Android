@@ -22,8 +22,9 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.app_name)
-        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.title =
+            resources.getString(R.string.app_name)
+
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_todo_list,
@@ -68,38 +69,11 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.trash -> {
-                // Todoを全件削除する
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("全件削除しますか？")
-                    .setPositiveButton(R.string.deleteButton) { _, _ ->
-                        ToDoModel().allDelete(requireContext()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("削除しました")
-                                .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
-                                .show()
-                        }
-
-                    }
-                    .setNegativeButton(R.string.cancelButton) { _, _ -> }
-                    .show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     /**
      * 選択したTodoの詳細に遷移する
      */
     private fun onClick(todo: ToDoModel) {
-/// Todo詳細画面に遷移する
+        /// Todo詳細画面に遷移する
         view?.findNavController()
             ?.navigate(TabFragmentDirections.actionTabFragmentToTodoDetailFragment(todo.createTime))
     }
