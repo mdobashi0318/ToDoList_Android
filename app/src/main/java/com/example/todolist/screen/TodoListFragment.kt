@@ -31,6 +31,23 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
             container,
             false
         )
+
+        var todoModel = ToDoModel().findTodos(requireContext(), flag)
+        val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
+        val layoutManager = LinearLayoutManager(requireContext())
+
+        if (todoModel.isEmpty()) {
+            binding.emptyTextView.isVisible = true
+            binding.todoRecyclerView.isVisible = false
+        } else {
+            binding.emptyTextView.isVisible = false
+            binding.todoRecyclerView.isVisible = true
+            // アダプターとレイアウトマネージャーをセット
+            binding.todoRecyclerView.layoutManager = layoutManager
+            binding.todoRecyclerView.adapter = adapter
+            binding.todoRecyclerView.setHasFixedSize(true)
+        }
+
         binding.floatingActionButton.setOnClickListener { view: View ->
             // Todo作成画面に遷移する
             view.findNavController()
@@ -43,31 +60,6 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
 
         return binding.root
     }
-
-
-    override fun onResume() {
-        super.onResume()
-
-        var todoModel = ToDoModel().findTodos(requireContext(), flag)
-        val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
-        val layoutManager = LinearLayoutManager(requireContext())
-
-        if (todoModel.isEmpty()) {
-            binding.emptyTextView.isVisible = true
-            binding.todoRecyclerView.isVisible = false
-            return
-        } else {
-            binding.emptyTextView.isVisible = false
-            binding.todoRecyclerView.isVisible = true
-            // アダプターとレイアウトマネージャーをセット
-            binding.todoRecyclerView.layoutManager = layoutManager
-            binding.todoRecyclerView.adapter = adapter
-            binding.todoRecyclerView.setHasFixedSize(true)
-        }
-
-
-    }
-
 
     /**
      * 選択したTodoの詳細に遷移する
