@@ -134,7 +134,7 @@ class TodoRegistrationFragment : Fragment() {
                 .setTitle("登録しました")
                 .setPositiveButton(R.string.closeButton) { _, _ ->
                     this.findNavController()
-                        .navigate(R.id.action_todoRegistrationFragment_to_todoListFragment)
+                        .navigate(R.id.action_todoRegistrationFragment_to_tabFragment)
                 }
                 .show()
         }
