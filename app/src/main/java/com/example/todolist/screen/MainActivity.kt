@@ -2,6 +2,7 @@ package com.example.todolist.screen
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -62,11 +63,20 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+
             //通知をシステムに登録しています。
             val builder = NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 setContentTitle(NOTIFICATION_TITLE)
                 setContentText(NOTIFICATION_MESSAGE)
+                val pending: PendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, MainActivity::class.java),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+                setContentIntent(pending)
+                setAutoCancel(true)
                 priority = NotificationCompat.PRIORITY_DEFAULT
             }
 
