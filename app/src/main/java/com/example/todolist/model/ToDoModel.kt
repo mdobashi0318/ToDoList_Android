@@ -108,7 +108,8 @@ open class ToDoModel : RealmObject() {
             dateList[2].toInt(),
             timeList[0].toInt(),
             timeList[1].toInt(),
-            createTime.toInt()
+            createTime,
+            toDoName
         )
         success()
     }
@@ -153,7 +154,8 @@ open class ToDoModel : RealmObject() {
             dateList[2].toInt(),
             timeList[0].toInt(),
             timeList[1].toInt(),
-            createTime.toInt()
+            createTime,
+            toDoName
         )
         success()
     }
@@ -183,7 +185,8 @@ open class ToDoModel : RealmObject() {
                 dateList[2].toInt(),
                 timeList[0].toInt(),
                 timeList[1].toInt(),
-                createTime.toInt()
+                createTime,
+                todo.toDoName
             )
         }
 
@@ -239,12 +242,23 @@ open class ToDoModel : RealmObject() {
         day: Int,
         hour: Int,
         min: Int,
-        createTime: Int
+        createTime: String,
+        title: String,
     ) {
         val calender = Calendar.getInstance()
-        val intent = Intent(context, Receiver::class.java)
+
+        val intent = Intent(context, Receiver::class.java).apply {
+            putExtra("title", title)
+            putExtra("createTime", createTime)
+        }
+
         val pendingIntent =
-            PendingIntent.getBroadcast(context, createTime, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(
+                context,
+                createTime.toInt(),
+                intent,
+                PendingIntent.FLAG_MUTABLE
+            )
         calender.set(Calendar.MONTH, month - 1)
         calender.set(Calendar.DAY_OF_MONTH, day)
         calender.set(Calendar.HOUR_OF_DAY, hour)
@@ -252,8 +266,9 @@ open class ToDoModel : RealmObject() {
         calender.set(Calendar.SECOND, 0)
 
         val alarmManager =
-            context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC, calender.timeInMillis, pendingIntent)
+
     }
 
 
