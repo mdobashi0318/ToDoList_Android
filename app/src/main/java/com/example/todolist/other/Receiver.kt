@@ -16,12 +16,12 @@ import com.example.todolist.screen.TodoDetailActivity
 class Receiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         if (context != null) {
-            val title = intent.getStringExtra("title") ?: "期限切れのTodoがあります"
+            val message = intent.getStringExtra("title") ?: ""
             val createTime = intent.getStringExtra("createTime") ?: ""
 
             MainActivity.sendNotification(
                 context,
-                title,
+                message,
                 createTime
             )
 

@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
         private const val NOTIFICATION_CHANNEL_ID = "com.example.todolist"
         private const val NOTIFICATION_CHANNEL_NAME = "todolist"
         private const val NOTIFICATION_CHANNEL_DESCRIPTION = "期限がきたら通知を表示します"
-        private const val NOTIFICATION_MESSAGE = ""
+        private const val NOTIFICATION_TITLE = "期限切れのTodoがあります"
 
-        fun sendNotification(context: Context, title: String, createTime: String) { if (createTime.isEmpty()) return
+        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
 
             val channelId = NOTIFICATION_CHANNEL_ID
             val channelName = NOTIFICATION_CHANNEL_NAME
@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity() {
             //通知をシステムに登録しています。
             val builder = NotificationCompat.Builder(context, channelId).apply {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
-                setContentTitle(title)
-                setContentText(NOTIFICATION_MESSAGE)
+                setContentTitle(NOTIFICATION_TITLE)
+                setContentText(message)
 
                 val intent = Intent(context, TodoDetailActivity::class.java).apply {
                     putExtra("createTime", createTime)
