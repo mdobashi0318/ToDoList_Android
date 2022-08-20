@@ -3,30 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/todoListFragment">
+    app:startDestination="@id/tabFragment">
 
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.example.todolist.screen.TodoListFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_todo_list" >
-        <action
-            android:id="@+id/action_todoListFragment_to_todoRegistrationFragment"
-            app:destination="@id/todoRegistrationFragment"
-            app:popUpTo="@id/todoRegistrationFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_todoListFragment_to_todoDetailFragment"
-            app:destination="@id/todoDetailFragment"
-            app:popUpTo="@id/todoListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_todo_list" />
     <fragment
         android:id="@+id/todoRegistrationFragment"
         android:name="com.example.todolist.screen.TodoRegistrationFragment"
         tools:layout="@layout/fragment_todo_registration" >
-        <action
-            android:id="@+id/action_todoRegistrationFragment_to_todoListFragment"
-            app:destination="@id/todoListFragment" />
         <action
             android:id="@+id/action_todoRegistrationFragment_to_todoDetailFragment"
             app:destination="@id/todoDetailFragment"
@@ -36,6 +23,10 @@
             android:name="createTime"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_todoRegistrationFragment_to_tabFragment"
+            app:destination="@id/tabFragment"
+            app:popUpTo="@id/tabFragment" />
     </fragment>
     <fragment
         android:id="@+id/todoDetailFragment"
@@ -46,10 +37,24 @@
             android:name="createTime"
             app:argType="string" />
         <action
-            android:id="@+id/action_todoDetailFragment_to_todoListFragment"
-            app:destination="@id/todoListFragment" />
-        <action
             android:id="@+id/action_todoDetailFragment_to_todoRegistrationFragment"
             app:destination="@id/todoRegistrationFragment" />
+        <action
+            android:id="@+id/action_todoDetailFragment_to_tabFragment"
+            app:destination="@id/tabFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tabFragment"
+        android:name="com.example.todolist.screen.TabFragment"
+        android:label="fragment_tab"
+        tools:layout="@layout/fragment_tab" >
+        <action
+            android:id="@+id/action_tabFragment_to_todoRegistrationFragment"
+            app:destination="@id/todoRegistrationFragment"
+            app:popUpTo="@id/tabFragment" />
+        <action
+            android:id="@+id/action_tabFragment_to_todoDetailFragment"
+            app:destination="@id/todoDetailFragment"
+            app:popUpTo="@id/tabFragment" />
     </fragment>
 </navigation>

@@ -23,19 +23,29 @@ class TodoDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        val args: TodoDetailFragmentArgs by navArgs()
+
+        val createTime: String = if (requireArguments().getString("createTime") != null) {
+            requireArguments().getString("createTime")!!
+        } else {
+            val args: TodoDetailFragmentArgs by navArgs()
+            args.createTime
+        }
+
         binding = DataBindingUtil.inflate<FragmentTodoDetailBinding>(
             inflater,
             R.layout.fragment_todo_detail,
             container,
             false
         )
-        ToDoModel().find(requireContext(), args.createTime)?.let {
+
+
+        ToDoModel().find(requireContext(), createTime)?.let {
             model = it
             binding.titleTextView.text = model.toDoName
             binding.dateTextView.text = model.todoDate + "\n" + model.todoTime
             binding.detailTextView.text = model.toDoDetail
-            binding.completeSwitch.isChecked = CompletionFlag.getCompletionFlag(model.completionFlag)
+            binding.completeSwitch.isChecked =
+                CompletionFlag.getCompletionFlag(model.completionFlag)
         }
 
         binding.completeSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -70,7 +80,7 @@ class TodoDetailFragment : Fragment() {
                                 .setTitle("削除しました")
                                 .setPositiveButton(R.string.closeButton) { _, _ ->
                                     view?.findNavController()
-                                        ?.navigate(R.id.action_todoDetailFragment_to_todoListFragment)
+                                        ?.navigate(R.id.action_todoDetailFragment_to_tabFragment)
                                 }
                                 .show()
                         }
