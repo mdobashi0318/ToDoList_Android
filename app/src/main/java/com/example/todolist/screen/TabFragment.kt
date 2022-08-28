@@ -11,9 +11,13 @@ import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTabBinding
 import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.CompletionFlag
+import com.example.todolist.other.Notification
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class TabFragment : Fragment() {
@@ -66,12 +70,18 @@ class TabFragment : Fragment() {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("全件削除しますか？")
                     .setPositiveButton(R.string.deleteButton) { _, _ ->
-                        ToDoModel().allDelete(requireContext()) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("削除しました")
-                                .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
-                                .show()
+                        CoroutineScope(Dispatchers.Default).launch {
+                            Notification.cancelAllNotification(requireContext()) {
+                                TodoApplication.database.todoDao().deleteAll()
+
+                            }
+
                         }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("削除しました")
+                            .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
+                            .show()
+
 
                     }
                     .setNegativeButton(R.string.cancelButton) { _, _ -> }

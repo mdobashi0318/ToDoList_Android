@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+
+
 open class ToDoModel : RealmObject() {
     @PrimaryKey
     var createTime: String = ""
@@ -189,7 +191,6 @@ open class ToDoModel : RealmObject() {
                 todo.toDoName
             )
         }
-
     }
 
     /**
