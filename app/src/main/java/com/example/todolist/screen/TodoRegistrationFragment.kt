@@ -14,9 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoRegistrationBinding
-import com.example.todolist.viewmodel.RegistrationViewModel
 import com.example.todolist.model.ToDoModel
-import com.example.todolist.model.ToDoModel1
+import com.example.todolist.viewmodel.RegistrationViewModel
 import com.example.todolist.other.CompletionFlag
 import com.example.todolist.other.Mode
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -138,7 +137,7 @@ class TodoRegistrationFragment : Fragment() {
         val format = SimpleDateFormat("MMddHHmmS")
         viewModel.add(
             requireContext(),
-            ToDoModel1(
+            ToDoModel(
                 format.format(Date()).toString(),
                 binding.titleEditText.text.toString(),
                 binding.dateTextView.text.toString(),
@@ -163,7 +162,7 @@ class TodoRegistrationFragment : Fragment() {
     private suspend fun updateTodo() {
         viewModel.update(
             requireContext(),
-            ToDoModel1(
+            ToDoModel(
                 viewModel.getCreateTime,
                 binding.titleEditText.text.toString(),
                 binding.dateTextView.text.toString(),

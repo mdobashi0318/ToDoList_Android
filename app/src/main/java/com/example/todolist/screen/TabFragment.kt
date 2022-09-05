@@ -3,13 +3,11 @@ package com.example.todolist.screen
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTabBinding
-import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.CompletionFlag
 import com.example.todolist.other.Notification
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -18,7 +16,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class TabFragment : Fragment() {
 

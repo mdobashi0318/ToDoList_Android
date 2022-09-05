@@ -2,8 +2,7 @@ package com.example.todolist.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.todolist.model.ToDoModel1
+import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.CompletionFlag
 import com.example.todolist.other.Notification
 import com.example.todolist.screen.TodoApplication
@@ -15,7 +14,7 @@ class TodoDetailViewModel : ViewModel() {
 
     private val dao = TodoApplication.database.todoDao()
 
-    lateinit var model: ToDoModel1
+    lateinit var model: ToDoModel
 
 
     suspend fun find(createTime: String) {

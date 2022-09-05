@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoDetailBinding
-import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.CompletionFlag
 import com.example.todolist.viewmodel.TodoDetailViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

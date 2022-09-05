@@ -69,7 +69,7 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
     /**
      * 選択したTodoの詳細に遷移する
      */
-    private fun onClick(todo: ToDoModel1) {
+    private fun onClick(todo: ToDoModel) {
         /// Todo詳細画面に遷移する
         view?.findNavController()
             ?.navigate(TabFragmentDirections.actionTabFragmentToTodoDetailFragment(todo.createTime))

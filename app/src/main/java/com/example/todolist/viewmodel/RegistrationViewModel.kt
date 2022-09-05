@@ -5,15 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.todolist.extensions.addFirstZero
 import com.example.todolist.model.ToDoModel
-import com.example.todolist.model.ToDoModel1
 import com.example.todolist.other.Mode
 import com.example.todolist.other.Notification
 import com.example.todolist.screen.TodoApplication
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 class RegistrationViewModel() : ViewModel() {
 
@@ -70,7 +64,7 @@ class RegistrationViewModel() : ViewModel() {
         }
     }
 
-    suspend fun add(context: Context, todo: ToDoModel1, success: () -> Unit) {
+    suspend fun add(context: Context, todo: ToDoModel, success: () -> Unit) {
         dao.add(
             todo
         )
@@ -84,7 +78,7 @@ class RegistrationViewModel() : ViewModel() {
         success()
     }
 
-    suspend fun update(context: Context, todo: ToDoModel1, success: () -> Unit) {
+    suspend fun update(context: Context, todo: ToDoModel, success: () -> Unit) {
         dao.update(
             todo
         )
