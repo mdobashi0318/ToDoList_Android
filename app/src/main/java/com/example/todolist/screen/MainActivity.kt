@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.topAppBar)
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
+
+        createChannel(applicationContext)
     }
 
 
@@ -39,26 +41,21 @@ class MainActivity : AppCompatActivity() {
         private const val NOTIFICATION_CHANNEL_DESCRIPTION = "期限がきたら通知を表示します"
         private const val NOTIFICATION_TITLE = "期限切れのTodoがあります"
 
-        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
-
-            val channelId = NOTIFICATION_CHANNEL_ID
-            val channelName = NOTIFICATION_CHANNEL_NAME
-            val channelDescription = NOTIFICATION_CHANNEL_DESCRIPTION
-
-            //Android 8.0 以上ではアプリの通知チャンネルを登録することが必要。
+        fun createChannel(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(channelId, channelName, importance).apply {
-                    description = channelDescription
+                val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance).apply {
+                    description = NOTIFICATION_CHANNEL_DESCRIPTION
                 }
                 val manager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.createNotificationChannel(channel)
             }
+        }
 
-
+        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
             //通知をシステムに登録しています。
-            val builder = NotificationCompat.Builder(context, channelId).apply {
+            val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 setContentTitle(NOTIFICATION_TITLE)
                 setContentText(message)
