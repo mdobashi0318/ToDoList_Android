@@ -42,7 +42,7 @@ class TodoDetailFragment : Fragment() {
         )
 
 
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             viewModel.find(createTime)
             binding.titleTextView.text = viewModel.model.toDoName
             binding.dateTextView.text = viewModel.model.todoDate + "\n" + viewModel.model.todoTime

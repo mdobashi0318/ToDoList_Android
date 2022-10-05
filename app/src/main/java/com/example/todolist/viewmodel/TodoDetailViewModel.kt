@@ -23,7 +23,7 @@ class TodoDetailViewModel : ViewModel() {
 
 
     fun updateFlag(context: Context, flag: Boolean) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             var completionFlag = CompletionFlag.getCompletionFlag(flag)
             model.completionFlag = completionFlag.value
             dao.update(model)
@@ -43,7 +43,7 @@ class TodoDetailViewModel : ViewModel() {
     }
 
     fun delete(context: Context, success: () -> Unit) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             dao.delete(model)
             Notification.cancelNotification(context, model.createTime)
         }

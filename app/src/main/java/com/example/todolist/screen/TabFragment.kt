@@ -67,7 +67,7 @@ class TabFragment : Fragment() {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("全件削除しますか？")
                     .setPositiveButton(R.string.deleteButton) { _, _ ->
-                        CoroutineScope(Dispatchers.Default).launch {
+                        CoroutineScope(Dispatchers.IO).launch {
                             Notification.cancelAllNotification(requireContext()) {
                                 TodoApplication.database.todoDao().deleteAll()
 
