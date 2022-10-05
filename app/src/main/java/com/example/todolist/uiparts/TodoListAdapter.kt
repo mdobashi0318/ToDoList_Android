@@ -11,7 +11,7 @@ import com.example.todolist.other.CompletionFlag
 import kotlinx.android.synthetic.main.activity_todo_recycler_view_item.view.*
 
 class TodoListAdapter(
-    private val todoModel: MutableList<ToDoModel>,
+    private val todoModel: List<ToDoModel>,
     private val onClick: (ToDoModel) -> Unit
 ) :
     RecyclerView.Adapter<TodoListAdapter.TodoListAdapterHolder>() {

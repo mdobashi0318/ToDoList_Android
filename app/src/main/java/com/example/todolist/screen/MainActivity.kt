@@ -8,21 +8,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavArgs
 import androidx.navigation.findNavController
-import androidx.navigation.navArgument
 import androidx.navigation.ui.NavigationUI
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.*
 import com.example.todolist.databinding.ActivityMainBinding
-import com.example.todolist.model.ToDoModel
-import com.example.todolist.uiparts.TodoListAdapter
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
