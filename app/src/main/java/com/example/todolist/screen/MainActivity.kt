@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
             //通知をシステムに登録しています。
             val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).apply {
-                setSmallIcon(R.drawable.ic_launcher_foreground)
+                setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
                 setContentTitle(NOTIFICATION_TITLE)
                 setContentText(message)
 
