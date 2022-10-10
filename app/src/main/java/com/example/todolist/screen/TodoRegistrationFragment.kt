@@ -14,14 +14,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoRegistrationBinding
-import com.example.todolist.model.RegistrationViewModel
 import com.example.todolist.model.ToDoModel
+import com.example.todolist.viewmodel.RegistrationViewModel
+import com.example.todolist.other.CompletionFlag
 import com.example.todolist.other.Mode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 class TodoRegistrationFragment : Fragment() {
@@ -33,15 +38,19 @@ class TodoRegistrationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate<FragmentTodoRegistrationBinding>(
             inflater,
             R.layout.fragment_todo_registration,
             container,
             false
         )
-        setObserver()
-        setRegisterButton()
+        CoroutineScope(Dispatchers.Main).launch {
+            setObserver()
+            setRegisterButton()
+        }
+
+
 
         (activity as AppCompatActivity).supportActionBar?.title = modeMessage(
             resources.getString(R.string.registration_title_add),
@@ -107,11 +116,14 @@ class TodoRegistrationFragment : Fragment() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(modeMessage("Todoを登録しますか？", "Todoを更新しますか？"))
                 .setPositiveButton(R.string.yesButton) { _, _ ->
-                    if (viewModel.getMode == Mode.Add) {
-                        addTodo()
-                    } else {
-                        updateTodo()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (viewModel.getMode == Mode.Add) {
+                            addTodo()
+                        } else {
+                            updateTodo()
+                        }
                     }
+
                 }
                 .setNegativeButton(R.string.noButton, null)
                 .show()
@@ -121,14 +133,18 @@ class TodoRegistrationFragment : Fragment() {
     /**
      * Todoを新規作成する
      */
-    private fun addTodo() {
-
-        ToDoModel().add(
+    private suspend fun addTodo() {
+        val format = SimpleDateFormat("MMddHHmmS")
+        viewModel.add(
             requireContext(),
-            binding.titleEditText.text.toString(),
-            binding.dateTextView.text.toString(),
-            binding.timeTextView.text.toString(),
-            binding.detailEditText.text.toString()
+            ToDoModel(
+                format.format(Date()).toString(),
+                binding.titleEditText.text.toString(),
+                binding.dateTextView.text.toString(),
+                binding.timeTextView.text.toString(),
+                binding.detailEditText.text.toString(),
+                CompletionFlag.Unfinished.value
+            )
         ) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("登録しました")
@@ -143,14 +159,17 @@ class TodoRegistrationFragment : Fragment() {
     /**
      * Todoを更新する
      */
-    private fun updateTodo() {
-        ToDoModel().update(
+    private suspend fun updateTodo() {
+        viewModel.update(
             requireContext(),
-            binding.titleEditText.text.toString(),
-            binding.dateTextView.text.toString(),
-            binding.timeTextView.text.toString(),
-            binding.detailEditText.text.toString(),
-            viewModel.getCreateTime
+            ToDoModel(
+                viewModel.getCreateTime,
+                binding.titleEditText.text.toString(),
+                binding.dateTextView.text.toString(),
+                binding.timeTextView.text.toString(),
+                binding.detailEditText.text.toString(),
+                CompletionFlag.Unfinished.value
+            )
         ) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("更新しました")
@@ -164,14 +183,16 @@ class TodoRegistrationFragment : Fragment() {
                 }
                 .show()
         }
+
+
     }
 
     /**
      * Observerをセットする
      */
-    private fun setObserver() {
+    private suspend fun setObserver() {
         val args: TodoRegistrationFragmentArgs by navArgs()
-        viewModel.setModel(requireContext(), args.createTime)
+        viewModel.setModel(args.createTime)
         val titleObserver = Observer { title: String ->
             binding.titleEditText.setText(title)
         }

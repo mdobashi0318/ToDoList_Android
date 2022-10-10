@@ -10,18 +10,21 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTodoListBinding
-import com.example.todolist.model.ToDoModel
+import com.example.todolist.model.*
 import com.example.todolist.other.CompletionFlag
 import com.example.todolist.uiparts.TodoListAdapter
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
+
     private lateinit var binding: FragmentTodoListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         (activity as AppCompatActivity).supportActionBar?.title =
             resources.getString(R.string.app_name)
 
@@ -32,20 +35,22 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
             false
         )
 
-        var todoModel = ToDoModel().findTodos(requireContext(), flag)
-        val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
-        val layoutManager = LinearLayoutManager(requireContext())
+        binding.emptyTextView.isVisible = true
+        binding.todoRecyclerView.isVisible = false
 
-        if (todoModel.isEmpty()) {
-            binding.emptyTextView.isVisible = true
-            binding.todoRecyclerView.isVisible = false
-        } else {
-            binding.emptyTextView.isVisible = false
-            binding.todoRecyclerView.isVisible = true
-            // アダプターとレイアウトマネージャーをセット
-            binding.todoRecyclerView.layoutManager = layoutManager
-            binding.todoRecyclerView.adapter = adapter
-            binding.todoRecyclerView.setHasFixedSize(true)
+        CoroutineScope(Dispatchers.Main).launch {
+            var todoModel = TodoApplication.database.todoDao().getTodos(flag.value)
+            val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
+            val layoutManager = LinearLayoutManager(requireContext())
+
+            if (todoModel.isNotEmpty()) {
+                binding.emptyTextView.isVisible = false
+                binding.todoRecyclerView.isVisible = true
+                // アダプターとレイアウトマネージャーをセット
+                binding.todoRecyclerView.layoutManager = layoutManager
+                binding.todoRecyclerView.adapter = adapter
+                binding.todoRecyclerView.setHasFixedSize(true)
+            }
         }
 
         binding.floatingActionButton.setOnClickListener { view: View ->

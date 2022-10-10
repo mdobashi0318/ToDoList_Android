@@ -1,13 +1,17 @@
-package com.example.todolist.model
+package com.example.todolist.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.todolist.extensions.addFirstZero
+import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
-
+import com.example.todolist.other.Notification
+import com.example.todolist.screen.TodoApplication
 
 class RegistrationViewModel() : ViewModel() {
+
+    private val dao = TodoApplication.database.todoDao()
 
     private var createTime: String = ""
     val getCreateTime: String get() = createTime
@@ -26,6 +30,7 @@ class RegistrationViewModel() : ViewModel() {
     }
 
     private var mode: Mode = Mode.Add
+
     val getMode: Mode get() = mode
 
     private var time: MutableMap<String, Int> = mutableMapOf("hour" to 0, "min" to 0)
@@ -42,21 +47,49 @@ class RegistrationViewModel() : ViewModel() {
             time["min"] = value
         }
 
-    fun setModel(context: Context, createTime: String?) {
+    suspend fun setModel(createTime: String?) {
         createTime?.let { createTime: String ->
             this.createTime = createTime
-            ToDoModel().find(context, createTime)?.let { todo: ToDoModel ->
-                mode = Mode.Edit
-                toDoName.value = todo.toDoName
-                todoDate.value = todo.todoDate
-                toDoDetail.value = todo.toDoDetail
+            val model = dao.getTodo(createTime)
 
-                val tmpTime = todo.todoTime.split(":")
-                hour = tmpTime[0].toInt()
-                min = tmpTime[1].toInt()
-                todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
-            }
+            mode = Mode.Edit
+            toDoName.value = model.toDoName
+            todoDate.value = model.todoDate
+            toDoDetail.value = model.toDoDetail
+
+            val tmpTime = model.todoTime.split(":")
+            hour = tmpTime[0].toInt()
+            min = tmpTime[1].toInt()
+            todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
         }
+    }
+
+    suspend fun add(context: Context, todo: ToDoModel, success: () -> Unit) {
+        dao.add(
+            todo
+        )
+        Notification.setNotification(
+            context,
+            todo.todoDate,
+            todo.todoTime,
+            todo.createTime,
+            todo.toDoName
+        )
+        success()
+    }
+
+    suspend fun update(context: Context, todo: ToDoModel, success: () -> Unit) {
+        dao.update(
+            todo
+        )
+        Notification.setNotification(
+            context,
+            todo.todoDate,
+            todo.todoTime,
+            todo.createTime,
+            todo.toDoName
+        )
+        success()
     }
 
     fun setData(date: String) {

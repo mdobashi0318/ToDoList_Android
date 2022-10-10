@@ -8,21 +8,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavArgs
 import androidx.navigation.findNavController
-import androidx.navigation.navArgument
 import androidx.navigation.ui.NavigationUI
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.*
 import com.example.todolist.databinding.ActivityMainBinding
-import com.example.todolist.model.ToDoModel
-import com.example.todolist.uiparts.TodoListAdapter
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.topAppBar)
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
+
+        createChannel(applicationContext)
     }
 
 
@@ -47,27 +41,22 @@ class MainActivity : AppCompatActivity() {
         private const val NOTIFICATION_CHANNEL_DESCRIPTION = "期限がきたら通知を表示します"
         private const val NOTIFICATION_TITLE = "期限切れのTodoがあります"
 
-        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
-
-            val channelId = NOTIFICATION_CHANNEL_ID
-            val channelName = NOTIFICATION_CHANNEL_NAME
-            val channelDescription = NOTIFICATION_CHANNEL_DESCRIPTION
-
-            //Android 8.0 以上ではアプリの通知チャンネルを登録することが必要。
+        fun createChannel(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(channelId, channelName, importance).apply {
-                    description = channelDescription
+                val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance).apply {
+                    description = NOTIFICATION_CHANNEL_DESCRIPTION
                 }
                 val manager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.createNotificationChannel(channel)
             }
+        }
 
-
+        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
             //通知をシステムに登録しています。
-            val builder = NotificationCompat.Builder(context, channelId).apply {
-                setSmallIcon(R.drawable.ic_launcher_foreground)
+            val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).apply {
+                setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
                 setContentTitle(NOTIFICATION_TITLE)
                 setContentText(message)
 
