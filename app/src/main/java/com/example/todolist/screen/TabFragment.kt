@@ -1,9 +1,17 @@
 package com.example.todolist.screen
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todolist.R
@@ -51,6 +59,9 @@ class TabFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        requestPermission()
+
         tabAdapter = TabAdapter(this)
         viewPager.adapter = tabAdapter
     }
@@ -88,6 +99,22 @@ class TabFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun requestPermission() {
+        val notificationPermission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        val notificationRationale = shouldShowRequestPermissionRationale(
+            activity!!,
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (!notificationRationale && notificationPermission != PackageManager.PERMISSION_GRANTED) {
+            view?.findNavController()
+                ?.navigate(TabFragmentDirections.actionTabFragmentToRequestPermissionNotificationFragment())
+        }
+    }
+
 }
 
 
