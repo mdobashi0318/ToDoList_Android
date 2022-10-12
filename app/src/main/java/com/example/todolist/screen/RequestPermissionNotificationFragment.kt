@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.todolist.R
@@ -20,6 +21,7 @@ class RequestPermissionNotificationFragment : Fragment() {
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { _ ->
+            (activity as AppCompatActivity).supportActionBar?.show()
             view?.findNavController()
                 ?.navigate(RequestPermissionNotificationFragmentDirections.actionRequestPermissionNotificationFragmentToTabFragment())
         }
@@ -28,6 +30,8 @@ class RequestPermissionNotificationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (activity as AppCompatActivity).supportActionBar?.hide()
+
         binding = DataBindingUtil.inflate<FragmentRequestPermissionNotificationBinding>(
             inflater,
             R.layout.fragment_request_permission_notification,

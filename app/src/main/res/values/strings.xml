@@ -11,11 +11,11 @@
     <string name="yesButton">はい</string>>
     <string name="noButton">いいえ</string>>
     <string name="cancelButton">キャンセル</string>
+    <string name="nextButton">次へ</string>
 
     <string name="emptyText">Todoがありません</string>
 
     <string name="registration_title_add">Todo作成</string>
     <string name="registration_title_edit">Todo編集</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="request_permission_notification_text">このアプリでは通知をONにしておけば、Todoの期限が来たときに通知を送ります。</string>
 </resources>
