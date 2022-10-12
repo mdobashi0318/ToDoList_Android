@@ -2,6 +2,7 @@ package com.example.todolist.screen
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
@@ -57,7 +58,9 @@ class TabFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        requestPermission()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestNotificationPermission()
+        }
 
         tabAdapter = TabAdapter(this)
         viewPager.adapter = tabAdapter
@@ -97,7 +100,7 @@ class TabFragment : Fragment() {
         }
     }
 
-    private fun requestPermission() {
+    private fun requestNotificationPermission() {
         val notificationPermission = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.POST_NOTIFICATIONS
