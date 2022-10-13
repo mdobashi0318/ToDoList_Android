@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         createChannel(applicationContext)
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
         return navController.navigateUp()
@@ -44,7 +43,11 @@ class MainActivity : AppCompatActivity() {
         fun createChannel(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance).apply {
+                val channel = NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_NAME,
+                    importance
+                ).apply {
                     description = NOTIFICATION_CHANNEL_DESCRIPTION
                 }
                 val manager =
@@ -53,7 +56,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fun sendNotification(context: Context, message: String, createTime: String) { if (createTime.isEmpty()) return
+        fun sendNotification(context: Context, message: String, createTime: String) {
+            if (createTime.isEmpty()) return
             //通知をシステムに登録しています。
             val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
@@ -62,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
                 val intent = Intent(context, TodoDetailActivity::class.java).apply {
                     putExtra("createTime", createTime)
-                    flags =  Intent.FLAG_ACTIVITY_NEW_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
 
                 val pending: PendingIntent = PendingIntent.getActivity(
