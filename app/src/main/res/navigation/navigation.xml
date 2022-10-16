@@ -56,5 +56,18 @@
             android:id="@+id/action_tabFragment_to_todoDetailFragment"
             app:destination="@id/todoDetailFragment"
             app:popUpTo="@id/tabFragment" />
+        <action
+            android:id="@+id/action_tabFragment_to_requestPermissionNotificationFragment"
+            app:destination="@id/requestPermissionNotificationFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestPermissionNotificationFragment"
+        android:name="com.example.todolist.screen.RequestPermissionNotificationFragment"
+        android:label="fragment_request_permission_notification"
+        tools:layout="@layout/fragment_request_permission_notification" >
+        <action
+            android:id="@+id/action_requestPermissionNotificationFragment_to_tabFragment"
+            app:destination="@id/tabFragment" />
     </fragment>
 </navigation>
