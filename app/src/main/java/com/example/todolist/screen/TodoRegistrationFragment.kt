@@ -102,8 +102,7 @@ class TodoRegistrationFragment : Fragment() {
             // 入力されているかのチェック
             if (binding.titleEditText.text.toString().isEmpty() ||
                 binding.dateTextView.text.toString().isEmpty() ||
-                binding.timeTextView.text.toString().isEmpty() ||
-                binding.detailEditText.text.toString().isEmpty()
+                binding.timeTextView.text.toString().isEmpty()
             ) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("未入力の箇所があります")
