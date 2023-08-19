@@ -1,5 +1,6 @@
 package com.example.todolist.uiparts
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class TodoListAdapter(
         fun bind(todo: ToDoModel) {
             view.title.text = todo.toDoName
             view.complete.text = if(CompletionFlag.getCompletionFlag(todo.completionFlag)) "完了" else "未完了"
+            view.complete.setTextColor(if(CompletionFlag.getCompletionFlag(todo.completionFlag)) Color.GREEN else Color.YELLOW)
 
             var hour: String
             var min: String
