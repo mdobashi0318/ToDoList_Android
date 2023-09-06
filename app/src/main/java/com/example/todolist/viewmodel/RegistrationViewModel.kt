@@ -113,7 +113,7 @@ class RegistrationViewModel() : ViewModel() {
     fun setTime(hour: Int, min: Int) {
         this.hour = hour
         this.min = min
-        todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
+        todoTime.value = "${this.hour.toString().addFirstZero()}:${this.min.toString().addFirstZero()}"
     }
 
     /**
