@@ -114,7 +114,7 @@ class Notification {
 
             val alarmManager =
                 context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calender.timeInMillis, pendingIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calender.timeInMillis, pendingIntent)
 
         }
 
