@@ -41,6 +41,17 @@ class TabFragment : Fragment() {
             container,
             false
         )
+
+        binding.floatingActionButton.setOnClickListener { view: View ->
+            // Todo作成画面に遷移する
+            view.findNavController()
+                .navigate(
+                    TabFragmentDirections.actionTabFragmentToTodoRegistrationFragment(
+                        null
+                    )
+                )
+        }
+
         return binding.root
     }
 
