@@ -107,6 +107,7 @@ class TodoRegistrationFragment : Fragment() {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("未入力の箇所があります")
                     .setNegativeButton(R.string.closeButton, null)
+                    .setCancelable(false)
                     .show()
                 return@setOnClickListener
             }
@@ -151,6 +152,7 @@ class TodoRegistrationFragment : Fragment() {
                     this.findNavController()
                         .navigate(R.id.action_todoRegistrationFragment_to_tabFragment)
                 }
+                .setCancelable(false)
                 .show()
         }
     }
@@ -180,6 +182,7 @@ class TodoRegistrationFragment : Fragment() {
                             )
                         )
                 }
+                .setCancelable(false)
                 .show()
         }
 

@@ -89,10 +89,12 @@ class TodoDetailFragment : Fragment() {
                                         view?.findNavController()
                                             ?.navigate(R.id.action_todoDetailFragment_to_tabFragment)
                                     }
+                                    .setCancelable(false)
                                     .show()
                         }
                     }
                     .setNegativeButton(R.string.cancelButton, null)
+                    .setCancelable(false)
                     .show()
                 true
             }

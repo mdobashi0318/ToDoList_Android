@@ -105,11 +105,13 @@ class TabFragment : Fragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle("削除しました")
                             .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
+                            .setCancelable(false)
                             .show()
 
 
                     }
                     .setNegativeButton(R.string.cancelButton) { _, _ -> }
+                    .setCancelable(false)
                     .show()
                 true
             }
