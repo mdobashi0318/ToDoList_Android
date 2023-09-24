@@ -102,12 +102,12 @@ class TodoRegistrationFragment : Fragment() {
             // 入力されているかのチェック
             if (binding.titleEditText.text.toString().isEmpty() ||
                 binding.dateTextView.text.toString().isEmpty() ||
-                binding.timeTextView.text.toString().isEmpty() ||
-                binding.detailEditText.text.toString().isEmpty()
+                binding.timeTextView.text.toString().isEmpty()
             ) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("未入力の箇所があります")
                     .setNegativeButton(R.string.closeButton, null)
+                    .setCancelable(false)
                     .show()
                 return@setOnClickListener
             }
@@ -152,6 +152,7 @@ class TodoRegistrationFragment : Fragment() {
                     this.findNavController()
                         .navigate(R.id.action_todoRegistrationFragment_to_tabFragment)
                 }
+                .setCancelable(false)
                 .show()
         }
     }
@@ -181,6 +182,7 @@ class TodoRegistrationFragment : Fragment() {
                             )
                         )
                 }
+                .setCancelable(false)
                 .show()
         }
 
@@ -193,26 +195,19 @@ class TodoRegistrationFragment : Fragment() {
     private suspend fun setObserver() {
         val args: TodoRegistrationFragmentArgs by navArgs()
         viewModel.setModel(args.createTime)
-        val titleObserver = Observer { title: String ->
-            binding.titleEditText.setText(title)
-        }
 
-        val detailObserver = Observer { detail: String ->
-            binding.detailEditText.setText(detail)
+        viewModel.toDoName.observe(viewLifecycleOwner) {
+            binding.titleEditText.setText(it)
         }
-
-        val dateObserver = Observer { date: String ->
-            binding.dateTextView.text = date
+        viewModel.toDoDetail.observe(viewLifecycleOwner) {
+            binding.detailEditText.setText(it)
         }
-
-        val timeObserver = Observer { time: String ->
-            binding.timeTextView.text = time
+        viewModel.todoDate.observe(viewLifecycleOwner) {
+            binding.dateTextView.text = it
         }
-
-        viewModel.toDoName.observe(viewLifecycleOwner, titleObserver)
-        viewModel.toDoDetail.observe(viewLifecycleOwner, detailObserver)
-        viewModel.todoDate.observe(viewLifecycleOwner, dateObserver)
-        viewModel.todoTime.observe(viewLifecycleOwner, timeObserver)
+        viewModel.todoTime.observe(viewLifecycleOwner) {
+            binding.timeTextView.text = it
+        }
     }
 
     /**

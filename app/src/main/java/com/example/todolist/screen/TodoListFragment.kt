@@ -16,6 +16,8 @@ import com.example.todolist.uiparts.TodoListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.temporal.ChronoUnit
+import com.example.todolist.extensions.LocalDateTimeExtension
 
 class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
 
@@ -39,7 +41,32 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
         binding.todoRecyclerView.isVisible = false
 
         CoroutineScope(Dispatchers.Main).launch {
-            var todoModel = TodoApplication.database.todoDao().getTodos(flag.value)
+            var todoModel =
+                listOf<ToDoModel>()// = TodoApplication.database.todoDao().getTodos(flag.value)
+
+            todoModel = when (flag) {
+                CompletionFlag.Unfinished -> TodoApplication.database.todoDao()
+                    .getTodos(CompletionFlag.Unfinished.value)
+                    .filter {
+                        ChronoUnit.MINUTES.between(
+                            LocalDateTimeExtension.fromStringToDate("${it.todoDate} ${it.todoTime}"),
+                            LocalDateTimeExtension.now()
+                        ) <= 0
+                    }
+
+                CompletionFlag.Completion -> TodoApplication.database.todoDao()
+                    .getTodos(CompletionFlag.Completion.value)
+
+                CompletionFlag.Expired -> TodoApplication.database.todoDao()
+                    .getTodos(CompletionFlag.Unfinished.value)
+                    .filter {
+                        ChronoUnit.MINUTES.between(
+                            LocalDateTimeExtension.fromStringToDate("${it.todoDate} ${it.todoTime}"),
+                            LocalDateTimeExtension.now()
+                        ) >= 1
+                    }
+            }
+
             val adapter = TodoListAdapter(todoModel) { todo -> onClick(todo) }
             val layoutManager = LinearLayoutManager(requireContext())
 
@@ -51,16 +78,6 @@ class TodoListFragment(private val flag: CompletionFlag) : Fragment() {
                 binding.todoRecyclerView.adapter = adapter
                 binding.todoRecyclerView.setHasFixedSize(true)
             }
-        }
-
-        binding.floatingActionButton.setOnClickListener { view: View ->
-            // Todo作成画面に遷移する
-            view.findNavController()
-                .navigate(
-                    TabFragmentDirections.actionTabFragmentToTodoRegistrationFragment(
-                        null
-                    )
-                )
         }
 
         return binding.root

@@ -1,5 +1,6 @@
 package com.example.todolist.screen
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -47,6 +48,10 @@ class TodoDetailFragment : Fragment() {
             binding.titleTextView.text = viewModel.model.toDoName
             binding.dateTextView.text = viewModel.model.todoDate + "\n" + viewModel.model.todoTime
             binding.detailTextView.text = viewModel.model.toDoDetail
+            if (viewModel.model.toDoDetail.isEmpty()) {
+                binding.detailCardView.visibility = View.GONE
+            }
+
             binding.completeSwitch.isChecked =
                 CompletionFlag.getCompletionFlag(viewModel.model.completionFlag)
             binding.completeSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -84,10 +89,12 @@ class TodoDetailFragment : Fragment() {
                                         view?.findNavController()
                                             ?.navigate(R.id.action_todoDetailFragment_to_tabFragment)
                                     }
+                                    .setCancelable(false)
                                     .show()
                         }
                     }
                     .setNegativeButton(R.string.cancelButton, null)
+                    .setCancelable(false)
                     .show()
                 true
             }

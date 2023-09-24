@@ -41,6 +41,17 @@ class TabFragment : Fragment() {
             container,
             false
         )
+
+        binding.floatingActionButton.setOnClickListener { view: View ->
+            // Todo作成画面に遷移する
+            view.findNavController()
+                .navigate(
+                    TabFragmentDirections.actionTabFragmentToTodoRegistrationFragment(
+                        null
+                    )
+                )
+        }
+
         return binding.root
     }
 
@@ -51,14 +62,20 @@ class TabFragment : Fragment() {
 
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            if (position == 0) tab.text = "未完了" else tab.text = "完了"
+            tab.text = when (position) {
+                0 -> "未完了"
+                1 -> "期限切れ"
+                else -> {
+                    "完了"
+                }
+            }
         }.attach()
     }
 
     override fun onResume() {
         super.onResume()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestNotificationPermission()
         }
 
@@ -88,14 +105,17 @@ class TabFragment : Fragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle("削除しました")
                             .setPositiveButton(R.string.closeButton) { _, _ -> onResume() }
+                            .setCancelable(false)
                             .show()
 
 
                     }
                     .setNegativeButton(R.string.cancelButton) { _, _ -> }
+                    .setCancelable(false)
                     .show()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -120,11 +140,15 @@ class TabFragment : Fragment() {
 
 class TabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) TodoListFragment(CompletionFlag.Unfinished) else TodoListFragment(
-            CompletionFlag.Completion
-        )
+        return when (position) {
+            0 -> TodoListFragment(CompletionFlag.Unfinished)
+            1 -> TodoListFragment(CompletionFlag.Expired)
+            else -> {
+                TodoListFragment(CompletionFlag.Completion)
+            }
+        }
     }
 }

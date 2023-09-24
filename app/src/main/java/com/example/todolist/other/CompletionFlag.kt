@@ -5,7 +5,10 @@ enum class CompletionFlag(val value: String) {
     Unfinished("0"),
 
     /** 完了 */
-    Completion("1");
+    Completion("1"),
+
+    /** 期限切れ */
+    Expired("2");
 
 
     companion object {

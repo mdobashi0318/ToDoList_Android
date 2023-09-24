@@ -1,5 +1,6 @@
 package com.example.todolist.other
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -74,6 +75,7 @@ class Notification {
          * @param createTime 通知設定の識別値
          * @param title 通知タイトル
          */
+        @SuppressLint("ScheduleExactAlarm")
         fun setNotification(
             context: Context,
             date: String,
@@ -112,7 +114,7 @@ class Notification {
 
             val alarmManager =
                 context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.setExact(AlarmManager.RTC, calender.timeInMillis, pendingIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calender.timeInMillis, pendingIntent)
 
         }
 
@@ -129,7 +131,7 @@ class Notification {
                     context,
                     it.createTime.toInt(),
                     intent,
-                    PendingIntent.FLAG_MUTABLE
+                    PendingIntent.FLAG_IMMUTABLE
                 )
                 val alarmManager =
                     context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -151,7 +153,7 @@ class Notification {
                     context,
                     createTime.toInt(),
                     intent,
-                    PendingIntent.FLAG_MUTABLE
+                    PendingIntent.FLAG_IMMUTABLE
                 )
 
             val alarmManager =

@@ -8,6 +8,8 @@ import com.example.todolist.model.ToDoModel
 import com.example.todolist.other.Mode
 import com.example.todolist.other.Notification
 import com.example.todolist.screen.TodoApplication
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class RegistrationViewModel() : ViewModel() {
 
@@ -47,6 +49,14 @@ class RegistrationViewModel() : ViewModel() {
             time["min"] = value
         }
 
+
+    init {
+        initTime()
+    }
+
+    /**
+     * Todoがあれば各プロパティにセットする
+     */
     suspend fun setModel(createTime: String?) {
         createTime?.let { createTime: String ->
             this.createTime = createTime
@@ -57,10 +67,7 @@ class RegistrationViewModel() : ViewModel() {
             todoDate.value = model.todoDate
             toDoDetail.value = model.toDoDetail
 
-            val tmpTime = model.todoTime.split(":")
-            hour = tmpTime[0].toInt()
-            min = tmpTime[1].toInt()
-            todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
+            setTime(model.todoTime)
         }
     }
 
@@ -92,14 +99,46 @@ class RegistrationViewModel() : ViewModel() {
         success()
     }
 
+    /**
+     * Pickerで設定した日付を格納する
+     */
     fun setData(date: String) {
         todoDate.value = date
     }
 
+
+    /**
+     * 引数の時間を格納する
+     */
     fun setTime(hour: Int, min: Int) {
         this.hour = hour
         this.min = min
-        todoTime.value = "${this.hour}:${this.min.toString().addFirstZero()}"
+        todoTime.value = "${this.hour.toString().addFirstZero()}:${this.min.toString().addFirstZero()}"
     }
+
+    /**
+     * 引数の時間を格納する
+     */
+    private fun setTime(time: String) {
+        val tmpTime = time.split(":")
+        setTime(tmpTime[0].toInt(), tmpTime[1].toInt())
+    }
+
+
+    /**
+     * 画面開いた時の日付と時間の初期値としてセットする
+     */
+    private fun initTime() {
+        val localDateTime = LocalDateTime.now()
+
+        val dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val date = dateFormat.format(localDateTime)
+        todoDate.value = date
+
+        val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
+        val time = timeFormat.format(localDateTime)
+        setTime(time)
+    }
+
 
 }
